@@ -18,3 +18,7 @@ ID instruction_decode(
 // Instantiate EX
 EX execution(
 	));
+
+// Instantiate WB
+WB write_back(
+	));
