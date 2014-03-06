@@ -1,3 +1,4 @@
+// Author:  David Mateo
 // Instruction Fetch
 // This module contains all modules used for Instruction Fetch 
 module IF(instr, clk, rst_n, hlt);
