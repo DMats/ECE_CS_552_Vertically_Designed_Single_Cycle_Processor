@@ -8,7 +8,7 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 	output[15:0] dst;
 	output ov, zr;
 	
-	wire [16:0] temp_dst;
+	wire [16:0] temp_dst, arithmetic_temp, saturated_arithmetic;
 	wire ov_pos, ov_neg, exception;
 	
 	//opcodes
@@ -21,10 +21,18 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 	localparam sra16 = 3'b111;
 	localparam lhb16 = 3'b110;
 	
+	// Addition and Subtraction with overflow //
+	assign arithmetic_temp = 	(ops==add16)	?	(src1 + src0):
+								(ops==sub16)	?	(src1 - src0):
+								17'hxxxxx;
+								
+	assign exception = ((ops==sub16) & (src1[15] == src0[15]));
+	assign ov_pos = (~src0[15] & ~src1[15] & arithmetic_temp[15] & ~exception)
+	assign ov_neg = (src0[15] & src1[15] & ~arithmetic_temp[15] & ~exception)
+	
+	
 	// Perform required operation
-	assign temp_dst = 	(ops==add16)	?	(src1 + src0):
-						(ops==sub16)	?	(src1 - src0):
-						(ops==and16)	?	{1'b0,(src1&src0)}:
+	assign temp_dst = 	(ops==and16)	?	{1'b0,(src1&src0)}:
 						(ops==nor16)	?	{1'b0,~(src1|src0)}:
 						(ops==sll16)	?	{1'b0,src0<<$unsigned(shamt)}:
 						(ops==srl16)	?	{1'b0,src0>>$unsigned(shamt)}:
@@ -33,15 +41,8 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 											17'hxxxxx;
 									
 	// Determine if overflow has occured
-	assign exception = ((ops==sub16)&(src1==src0));
-	assign ov_pos = (~src0[15] & ~src1[15] & temp_dst[15] & ~exception)|(temp_dst[15]&~temp_dst[16]);
-	assign ov_neg = (src0[15] & src1[15] & ~temp_dst[15] & ~exception)|(~temp_dst[15]&temp_dst[16]);
 	assign ov = ((ov_pos | ov_neg)&((ops==add16)|(ops==sub16)));
-	assign dst = 	((ov_neg)&((ops==add16)|(ops==sub16)))	?	16'h8000:
-					((ov_pos)&((ops==add16)|(ops==sub16)))	?	16'h7fff:
-																temp_dst[15:0];
 								
 	// Check if result is 0
 	assign zr = &(~dst);
 endmodule
-
