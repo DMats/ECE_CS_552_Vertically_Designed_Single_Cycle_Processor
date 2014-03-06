@@ -18,11 +18,14 @@ cpu DUT(
 		
 initial begin
 	$dumpfile("cpu_dump.vcd");
-	$dumpvars(0,cpu_tb.v);
+	$dumpvars(0,cpu_tb);
 	clk = 0;
-	rst_n = 0;
+	rst_n = 1;
 	#5
 	rst_n = 1;
+
+	#100
+	$finish;
 end
 
 always begin

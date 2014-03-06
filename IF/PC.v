@@ -24,4 +24,9 @@ end
 assign next_iaddr = (hlt) ? iaddr : iaddr + 1'b1;
 //////////////////////////////////////////////
 
+
+always @(iaddr) begin
+	$display("Insruction address = %h", iaddr);
+end
+
 endmodule

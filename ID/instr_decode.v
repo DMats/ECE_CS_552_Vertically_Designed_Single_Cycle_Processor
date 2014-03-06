@@ -14,6 +14,15 @@ module I_DECODE(instr, zr, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1se
 	output hlt, src1sel, re0, re1, we;
 	
 	wire [3:0] opcode, reg_dest, reg_src1, reg_src0;
+
+
+	initial begin
+		$display("HELLO WORLD.");  // worked.
+	end
+
+	always @(instr) begin
+		$display("instruction = %h", instr);
+	end
 	
 	// Instruction Opcodes
 	localparam addOp = 4'b0000;

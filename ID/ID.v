@@ -50,7 +50,6 @@ module ID(
 				.hlt(hlt_lcl)
 			);
 			
-	assign imm8 = instr[7:0];
 	assign hlt = hlt_lcl;
 							
 endmodule
