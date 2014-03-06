@@ -1,9 +1,9 @@
 // Instruction Fetch
 // This module contains all modules used for Instruction Fetch 
-module IF(instr, clk, rd_en, rst_n, hlt);
+module IF(instr, clk, rst_n, hlt);
 
 output wire [15:0] instr;
-input wire clk, rd_en, rst_n, hlt;
+input wire clk, rst_n, hlt;
 
 wire [15:0] iaddr;
 

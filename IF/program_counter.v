@@ -1,6 +1,6 @@
 // program_counter
 // Authors:  David Mateo, R. Scott Carson
-module program_counter(iaddr, clk, rst_n, hlt);
+module PC(iaddr, clk, rst_n, hlt);
 
 output reg [15:0] iaddr;
 input clk, rst_n, hlt;
