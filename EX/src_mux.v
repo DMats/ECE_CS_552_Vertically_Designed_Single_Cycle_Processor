@@ -13,6 +13,6 @@ module src_mux(src1, src1sel, p1, imm8);
 	output [15:0] src1;
 	
 	assign src1 = (src1sel)	?	p1:
-								({ {8{imm8[7]}, imm8});
+								({{8{imm8[7]}}, imm8});
 		
 endmodule
