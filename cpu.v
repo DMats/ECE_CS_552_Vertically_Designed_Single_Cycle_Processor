@@ -1,4 +1,4 @@
-`include "IF/inst_fetch.v"
+`include "IF/IF.v"
 `include "ID/ID.v"
 `include "EX/EX.v"
 `include "WB/WB.v"
