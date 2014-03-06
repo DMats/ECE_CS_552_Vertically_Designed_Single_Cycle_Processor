@@ -38,9 +38,9 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 	assign dst = 	(ops==add16)||(ops==sub16)	?	(temp_dst):
 								(ops==and16)	?	{1'b0,(src1&src0)}:
 								(ops==nor16)	?	{1'b0,~(src1|src0)}:
-								(ops==sll16)	?	{1'b0,src0<<$unsigned(shamt)}:
-								(ops==srl16)	?	{1'b0,src0>>$unsigned(shamt)}:
-								(ops==sra16)	?	{1'b0,$signed(src0)>>>$unsigned(shamt)}:
+								(ops==sll16)	?	{1'b0,src1<<$unsigned(shamt)}:
+								(ops==srl16)	?	{1'b0,src1>>$unsigned(shamt)}:
+								(ops==sra16)	?	{1'b0,$signed(src1)>>>$unsigned(shamt)}:
 								(ops==lhb16)	?	{1'b0,{src0[7:0],src1[7:0]}}:
 													17'hxxxxx;
 									
