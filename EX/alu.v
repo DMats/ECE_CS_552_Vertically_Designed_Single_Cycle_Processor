@@ -24,21 +24,25 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 	// Addition and Subtraction with overflow //
 	assign arithmetic_temp = 	(ops==add16)	?	(src1 + src0):
 								(ops==sub16)	?	(src1 - src0):
-								17'hxxxxx;
+													17'hxxxxx;
 								
 	assign exception = ((ops==sub16) & (src1[15] == src0[15]));
-	assign ov_pos = (~src0[15] & ~src1[15] & arithmetic_temp[15] & ~exception)
-	assign ov_neg = (src0[15] & src1[15] & ~arithmetic_temp[15] & ~exception)
+	assign ov_pos = (~src0[15] & ~src1[15] & arithmetic_temp[15] & ~exception);
+	assign ov_neg = (src0[15] & src1[15] & ~arithmetic_temp[15] & ~exception);
 	
+	assign temp_dst = 	(ov_pos)	?	(16'h7FFF):
+						(ov_neg)	?	(16'h8000):
+										arithmetic_temp;
 	
 	// Perform required operation
-	assign temp_dst = 	(ops==and16)	?	{1'b0,(src1&src0)}:
-						(ops==nor16)	?	{1'b0,~(src1|src0)}:
-						(ops==sll16)	?	{1'b0,src0<<$unsigned(shamt)}:
-						(ops==srl16)	?	{1'b0,src0>>$unsigned(shamt)}:
-						(ops==sra16)	?	{1'b0,$signed(src0)>>>$unsigned(shamt)}:
-						(ops==lhb16)	?	{1'b0,{src0[7:0],src1[7:0]}}:
-											17'hxxxxx;
+	assign dst = 	(ops==add16)||(ops==sub16)	?	(temp_dst):
+								(ops==and16)	?	{1'b0,(src1&src0)}:
+								(ops==nor16)	?	{1'b0,~(src1|src0)}:
+								(ops==sll16)	?	{1'b0,src0<<$unsigned(shamt)}:
+								(ops==srl16)	?	{1'b0,src0>>$unsigned(shamt)}:
+								(ops==sra16)	?	{1'b0,$signed(src0)>>>$unsigned(shamt)}:
+								(ops==lhb16)	?	{1'b0,{src0[7:0],src1[7:0]}}:
+													17'hxxxxx;
 									
 	// Determine if overflow has occured
 	assign ov = ((ov_pos | ov_neg)&((ops==add16)|(ops==sub16)));
