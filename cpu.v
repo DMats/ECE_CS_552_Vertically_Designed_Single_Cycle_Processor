@@ -36,7 +36,8 @@ ID instruction_decode(
 	.clk(clk),
 	.rst_n(rst_n),
 	.zr(zr_lcl),
-	.dst(dst_lcl));
+	.dst(dst_lcl)
+	);
 
 
 // Instantiate EX
@@ -45,12 +46,12 @@ EX execution(
 	.dst(dst_lcl),
 	.zr(zr_lcl),
 	// Input
-	.func(func_lcl)
+	.func(func_lcl),
 	.shamt(shamt_lcl),
 	.src1sel(src1sel_lcl),
 	.src0(src0_lcl),
-	.imm8([7:0]instr_lcl),
-	.p1(p1_lcl));
-	));
+	.imm8(instr_lcl[7:0]),
+	.p1(p1_lcl)
+	);
 
 endmodule

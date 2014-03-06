@@ -7,6 +7,7 @@
 TEST_BEGIN:		LLB R15, 0xFF		#r15 <= 0xFFFF - Used to check pass/fail for SLL
 				LLB R14, 0xFF		#r14 <= 0xFFFF - Used to check pass/fail for SRL
 				LLB R13, 0xFF		#r13 <= 0xFFFF - Used to check pass/fail for SRA
+				LLB R12, 0xFF		#r12 <= 0xFFFF - Used to check pass/fail for ADDZ
 
 				# Testing SLL
 SLL_TEST:		LLB R1, 0x12		#r1 <= 0x0012
@@ -39,9 +40,18 @@ SRA_TEST:		LLB R1, 0x00
 				SRA R1, R1, 0x8
 				SUB R3, R2, R1
 				B neq, SRA_FAIL
-				B uncond, END_TEST
+				B uncond, ADDZ_TEST
 				
 SRA_FAIL:		LLB R13, 0x00
 
+				# Testing ADDZ instruction
+ADDZ_TEST:		LLB R1, 0x0E
+				LLB R2, 0x00
+				ADDZ R3, R2, R1
+				SUB R1, R1, R3
+				B neq, ADDZ_FAIL
+				B uncond, END_TEST
 
+ADDZ_FAIL:		LLB R12, 0x00
+				
 END_TEST:		HLT
