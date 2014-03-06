@@ -45,7 +45,7 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 													17'hxxxxx;
 									
 	// Determine if overflow has occured
-	assign ov = ((ov_pos | ov_neg)&((ops==add16)|(ops==sub16)));
+	assign ov = (ov_pos | ov_neg);
 								
 	// Check if result is 0
 	assign zr = &(~dst);
