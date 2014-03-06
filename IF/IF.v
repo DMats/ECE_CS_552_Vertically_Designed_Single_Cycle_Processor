@@ -8,8 +8,22 @@ input wire clk, rst_n, hlt;
 
 wire [15:0] iaddr;
 
-IM instr_mem(.clk(clk), .addr(iaddr), .rd_en(1'b1), .instr(instr));
+// Instantiate Instruction Memory
+IM instr_mem(
+	// Output
+	.instr(instr),
+	// Input
+	.clk(clk), 
+	.addr(iaddr), 
+	.rd_en(1'b1));
 
-PC program_counter(.clk(clk), .iaddr(iaddr), .rst_n(rst_n), .hlt(hlt));
+// Instantiate Program Counter
+PC program_counter(
+	// Output
+	.iaddr(iaddr), 
+	// Input
+	.clk(clk), 
+	.rst_n(rst_n), 
+	.hlt(hlt));
 
 endmodule
