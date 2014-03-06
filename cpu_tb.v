@@ -17,6 +17,8 @@ cpu DUT(
 		);
 		
 initial begin
+	$dumpfile("cpu_dump.vcd");
+	$dumpvars(0,cpu_tb.v);
 	clk = 0;
 	rst_n = 0;
 	#5
