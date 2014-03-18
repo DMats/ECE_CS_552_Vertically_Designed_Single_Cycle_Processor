@@ -1,8 +1,8 @@
-<h1>README</h1>
+<h1>Readme</h1>
   
   This repository contains responses to the homeworks and project prompts for the Spring 2014 semester of ECE/CS 552        Introduction to Computer Architecture Class.  
   
-<h1>CONTRIBUTORS</h1>
+<h1>Contributors</h1>
 
   David Mateo<br>
   R. Scott Carson
