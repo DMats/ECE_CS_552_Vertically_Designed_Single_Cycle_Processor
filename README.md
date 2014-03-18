@@ -24,7 +24,7 @@ MEM - Memory<br>
 WB - Write Back<br>
 
 <h5>Other</h5>
-This folder contains files used for purposes other than the processor being developed for the final project.  This includes files for homework questions.
+This folder contains files used for purposes other than the main pipelined processor project.  This includes files for homework questions.
 
 
 
