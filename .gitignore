@@ -1,4 +1,3 @@
 cpu.o
 cpu_dump.vcd
 cpu_tb.v.bak
-vvp_output.txt

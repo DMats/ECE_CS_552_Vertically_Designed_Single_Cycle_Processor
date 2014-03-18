@@ -1,0 +1,17 @@
+R00000001 = 0005
+R00000002 = 0006
+R00000003 = fff8
+R00000004 = 0008
+R00000005 = aaaa
+R00000006 = ffff
+R00000007 = aaaa
+R00000008 = ffff
+R00000009 = xxxx
+R0000000a = xxxx
+R0000000b = xxxx
+R0000000c = xxxx
+R0000000d = xxxx
+R0000000e = xxxx
+R0000000f = xxxx
+End Time:    300
+End PC:     0025
