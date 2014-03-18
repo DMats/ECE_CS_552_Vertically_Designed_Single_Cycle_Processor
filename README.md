@@ -1,4 +1,13 @@
-This project is a response to the Spring 2014 ECE/CS 552 semester project prompt.
+README
+  
+  This repository contains responses to the homeworks and project prompts for the Spring 2014 semester of ECE/CS 552        Introduction to Computer Architecture Class.  
+  
+CONTRIBUTORS
+
+  David Mateo
+  R. Scott Carson
+  
+Pipeline Stages:
 
 IF - Instruction Fetch
 
