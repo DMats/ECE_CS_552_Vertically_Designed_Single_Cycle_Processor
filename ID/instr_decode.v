@@ -2,11 +2,11 @@
 // Instruction Decode Architecture
 // CS/ECE 552, Spring 2014
 
-module I_DECODE(instr, zr, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1sel, shamt, func);
+module I_DECODE(instr, N, Z, V, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1sel, shamt, func);
 
 	// Inputs
 	input[15:0] instr;
-	input zr;
+	input N, Z, V;
 
 	// Outputs
 	output [3:0] p0_addr, p1_addr, dst_addr, shamt;
@@ -60,7 +60,9 @@ module I_DECODE(instr, zr, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1se
 	// Extract all needed signals and then MUX them to output proper controls
 	assign dst_addr = instr[11:8];
 	assign p1_addr = instr[7:4];
-	assign p0_addr = instr[3:0];
+
+	assign p0_addr = (opcode == lhbOp)			?	instr[11:8]: 
+													instr[3:0];
 
 	// Extract the shift amount.  For llb, we set shift to 0
 	assign shamt =  (opcode == llbOp)	?	(4'b0000):
@@ -79,7 +81,7 @@ module I_DECODE(instr, zr, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1se
 	// Determine if the result will be written back to the register file.
 	// For this version of the instruction decoder onlt the addz instruction
 	// eliminates write back.
-	assign we = ((opcode == addzOp)&&(~zr))	?	1'b0: 
+	assign we = ((opcode == addzOp)&&(~Z))	?	1'b0: 
 												1'b1;
 												
 	assign re0 = 	(opcode == llbOp)	?	1'b0:

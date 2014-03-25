@@ -5,11 +5,11 @@ module ID(
 	// Output
 	p0, p1, shamt, func, src1sel, hlt, imm8,
 	// Input
-	instr, clk, rst_n, zr, dst);
+	instr, clk, rst_n, N, Z, V, dst);
 	
 	// Inputs //
 	input [15:0] instr, dst;
-	input clk, rst_n, zr;
+	input clk, rst_n, N, Z, V;
 	
 	// Outputs //
  	output [15:0] p0, p1;
@@ -24,7 +24,9 @@ module ID(
 	
 	I_DECODE inst_decoder(
 							.instr(instr),
-							.zr(zr),
+							.N(N),
+							.Z(Z),
+							.V(V),
 							.p0_addr(p0_addr),
 							.re0(re0),
 							.p1_addr(p1_addr),

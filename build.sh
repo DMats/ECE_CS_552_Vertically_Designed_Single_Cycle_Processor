@@ -1,1 +1,1 @@
-iverilog -o cpu.o IF/PC.v IF/instr_mem.v ID/rf_single_cycle.v ID/instr_decode.v EX/alu.v EX/src_mux.v cpu_tb.v cpu.v
+iverilog -o cpu.o IF/PC.v IF/instr_mem.v ID/rf_single_cycle.v ID/instr_decode.v EX/alu.v EX/src_mux.v cpu_tb.v cpu.v EX/flags.v

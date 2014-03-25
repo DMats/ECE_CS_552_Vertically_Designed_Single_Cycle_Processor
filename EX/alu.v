@@ -1,12 +1,12 @@
 // R Scott Carson
 // 16 bit ALU
-module ALU(ops, src1, src0, dst, ov, zr, shamt);
+module ALU(ops, src1, src0, dst, ov, zr, n, shamt);
 	input[2:0] ops;
 	input[15:0] src1, src0;
 	input[3:0] shamt;
 	
 	output[15:0] dst;
-	output ov, zr;
+	output ov, zr, n;
 	
 	wire [16:0] temp_dst, arithmetic_temp, saturated_arithmetic;
 	wire ov_pos, ov_neg, exception;
@@ -41,12 +41,15 @@ module ALU(ops, src1, src0, dst, ov, zr, shamt);
 								(ops==sll16)	?	{1'b0,src1<<$unsigned(shamt)}:
 								(ops==srl16)	?	{1'b0,src1>>$unsigned(shamt)}:
 								(ops==sra16)	?	{1'b0,$signed(src1)>>>$unsigned(shamt)}:
-								(ops==lhb16)	?	{1'b0,{src0[7:0],src1[7:0]}}:
+								(ops==lhb16)	?	{1'b0,{src1[7:0],src0[7:0]}}:
 													17'hxxxxx;
-									
-	// Determine if overflow has occured
+
+	// Combinational Logic for Flags //								
+	// Determine if overflow has occured	
 	assign ov = (ov_pos | ov_neg);
-								
-	// Check if result is 0
+	// Check if result is 0					
 	assign zr = &(~dst);
+	// TODO:  n is unimplemented.  Do not leave it as 1'b0.
+	assign n = 1'b0;
+
 endmodule

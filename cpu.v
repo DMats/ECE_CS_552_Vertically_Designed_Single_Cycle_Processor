@@ -8,10 +8,11 @@ input clk, rst_n;
 output hlt;
 
 
-wire [15:0] instr_lcl, dst_lcl, src0_lcl, p0_lcl, p1_lcl;
+wire [15:0] instr_lcl, dst_lcl, src0_lcl, p1_lcl;
 wire [3:0] shamt_lcl;
 wire [2:0] func_lcl;
-wire hlt_lcl, zr_lcl, src1sel_lcl;
+wire hlt_lcl, src1sel_lcl;
+wire N_lcl, Z_lcl, V_lcl;
 
 // Instantiate IF
 IF instruction_fetch(	
@@ -26,7 +27,7 @@ IF instruction_fetch(
 // Instantiate ID
 ID instruction_decode(	
 	// Output
-	.p0(p0_lcl),
+	.p0(src0_lcl),
 	.p1(p1_lcl),
 	.shamt(shamt_lcl),
 	.func(func_lcl),
@@ -36,7 +37,9 @@ ID instruction_decode(
 	.instr(instr_lcl),
 	.clk(clk),
 	.rst_n(rst_n),
-	.zr(zr_lcl),
+	.N(N_lcl),
+	.Z(Z_lcl),
+	.V(V_lcl),
 	.dst(dst_lcl)
 	);
 
@@ -45,8 +48,12 @@ ID instruction_decode(
 EX execution(
 	// Output
 	.dst(dst_lcl),
-	.zr(zr_lcl),
+	.N(N_lcl),
+	.Z(Z_lcl),
+	.V(V_lcl),
 	// Input
+	.clk(clk),
+	.rst_n(rst_n),
 	.func(func_lcl),
 	.shamt(shamt_lcl),
 	.src1sel(src1sel_lcl),
