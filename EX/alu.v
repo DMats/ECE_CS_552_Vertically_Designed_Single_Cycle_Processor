@@ -46,10 +46,10 @@ module ALU(ops, src1, src0, dst, ov, zr, n, shamt);
 
 	// Combinational Logic for Flags //								
 	// Determine if overflow has occured	
-	assign ov = (ov_pos | ov_neg);
+	assign ov = (ov_pos | ov_neg) ? 1'b1 : 1'b0;
 	// Check if result is 0					
 	assign zr = &(~dst);
 	// TODO:  n is unimplemented.  Do not leave it as 1'b0.
-	assign n = 1'b0;
+	assign n = ((ops==add16) || (ops==sub16)) ? dst[15] :  1'b0;
 
 endmodule
