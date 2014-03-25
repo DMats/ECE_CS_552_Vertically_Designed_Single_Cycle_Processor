@@ -7,6 +7,7 @@ module cpu(hlt, clk, rst_n);
 input clk, rst_n;
 output hlt;
 
+
 wire [15:0] instr_lcl, dst_lcl, src0_lcl, p0_lcl, p1_lcl;
 wire [3:0] shamt_lcl;
 wire [2:0] func_lcl;

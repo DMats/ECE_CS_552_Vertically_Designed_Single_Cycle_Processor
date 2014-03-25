@@ -25,8 +25,8 @@ always @(addr,re,clk)
 ////////////////////////////////////////////////
 // Model write, data is written on clock low //
 //////////////////////////////////////////////
-always @(addr,we,clk)
-  if (~clk && we && ~re)
+always @(posedge clk)
+  if (we && ~re)
     data_mem[addr] <= wrt_data;
 
 endmodule

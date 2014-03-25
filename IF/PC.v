@@ -11,10 +11,10 @@ wire [15:0] next_iaddr;
 ///////////////////////////////////////////////
 always @(posedge clk, negedge rst_n) begin
 	if (!rst_n) begin
-		iaddr <= next_iaddr;
+		iaddr <= iaddr;
 	end
 	else begin
-		iaddr <= iaddr;
+		iaddr <= next_iaddr;
 	end
 end
 ///////////////////////////////////////////////
