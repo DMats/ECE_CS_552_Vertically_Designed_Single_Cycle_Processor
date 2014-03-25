@@ -55,4 +55,6 @@ EX execution(
 	.p1(p1_lcl)
 	);
 
+assign hlt = hlt_lcl;
+
 endmodule

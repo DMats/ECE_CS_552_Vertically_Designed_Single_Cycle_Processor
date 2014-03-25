@@ -29,7 +29,7 @@ initial begin
 	#5
 	rst_n = 1;
 
-	#100
+	#1000
 	$finish;
 end
 

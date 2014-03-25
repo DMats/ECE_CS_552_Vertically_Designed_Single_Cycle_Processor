@@ -54,6 +54,9 @@ module I_DECODE(instr, zr, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1se
 	assign hlt = 	(opcode == hltOp)	?	(1'b1):
 											(1'b0);
 
+	// Pull down hlt to prevent cyclic dependency between ID and PC
+	//pulldown(hlt);
+
 	// Extract all needed signals and then MUX them to output proper controls
 	assign dst_addr = instr[11:8];
 	assign p1_addr = instr[7:4];
