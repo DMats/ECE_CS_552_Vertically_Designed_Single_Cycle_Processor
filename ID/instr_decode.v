@@ -4,23 +4,24 @@
 
 module I_DECODE(
 	//Inputs
-	instr, N, Z, V, PC, 
+	instr, N, Z, V, PC, jump_reg, 
 	//Outputs
-	new_pc, br_ctrl, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1sel, shamt, func);
+	alt_pc, alt_pc_ctrl, jal_pc, p0_addr, re0, p1_addr, re1, dst_addr, we, hlt, src1sel, shamt, func);
 
 	// Inputs
-	input[15:0] instr, PC;
+	input[15:0] instr, PC, jump_reg;
 	input N, Z, V;
 
 	// Outputs
 	output [3:0] p0_addr, p1_addr, dst_addr, shamt;
 	output [2:0] func;
-	output hlt, src1sel, re0, re1, we, br_ctrl;
-	output [15:0] new_pc;
+	output hlt, src1sel, re0, re1, we, alt_pc_ctrl;
+	output [15:0] alt_pc, jal_pc;
 	
 	wire [8:0] br_offset;
 	wire [3:0] opcode, reg_dest, reg_src1, reg_src0;
 	wire [2:0] br_cond;
+	wire br_ctrl, jal_ctrl, jr_ctrl;
 
 
 	initial begin
@@ -87,13 +88,28 @@ module I_DECODE(
 						((br_cond==ovfl)&&(V==1'b1))			||
 						((br_cond==uncond)))	?	instr[8:0]	:	
 													9'hxxx;
-	assign new_pc = PC + 1'b1 + br_offset;
+													
+	// Jump and Link Register //
+	assign jal_ctrl = (opcode==jalOp)	?	1'b1	:	1'b0;
+	
+	// Jump from Register // 
+	assign jr_ctrl = (opcode==jrOp)	?	1'b1	:	1'b0;
+	
+	// Assign alternate program counter if required // 
+	assign alt_pc = (br_ctrl)	?	PC + 1'b1 + br_offset	:
+					(jal_ctrl)	?	PC + 1'b1 + jal_offset	:
+					(jr_ctrl)	?	jump_reg:
+									16'hxxxx;
+									
+	assign alt_pc_ctrl = ((br_ctrl)|(jal_ctrl)|(jr_ctrl));
 
 	// Pull down hlt to prevent cyclic dependency between ID and PC
 	//pulldown(hlt);
 
 	// Extract all needed signals and then MUX them to output proper controls
-	assign dst_addr = instr[11:8];
+	assign dst_addr = (jal_ctrl)	?	4'b1111:
+										instr[11:8];
+										
 	assign p1_addr = instr[7:4];
 
 	assign p0_addr = (opcode == lhbOp)			?	instr[11:8]: 
@@ -115,10 +131,9 @@ module I_DECODE(
 																3'bxxx;
 	
 	// Determine if the result will be written back to the register file.
-	// For this version of the instruction decoder onlt the addz instruction
-	// eliminates write back.
 	assign we = ((opcode == addzOp)&&(~Z))	?	1'b0:
 				(br_ctrl)					?	1'b0:
+				(jr_ctrl)					?	1'b0:
 												1'b1;
 												
 	assign re0 = 	(opcode == llbOp)	?	1'b0:

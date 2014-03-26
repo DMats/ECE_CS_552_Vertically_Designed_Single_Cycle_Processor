@@ -6,7 +6,7 @@
 			LHB R2, 0x11		# <= Expect 0x1122
 			ADD R3, R3, R3		# <= Expect 0x6666
 			SUB R4, R4, R4		# <= Expect 0x0000
-			B eq, END_PROGRAM	# <= Expect branch to Halt, so R5 on should not be affected
+			JAL END_PROGRAM		# <= Expect branch to Halt, so R5 on should not be affected
 			ADDZ R5, R2, R2		# <= Expect 0x2244
 			ADDZ R5, R5, R5     # <= Expect 0x2244  (Should do nothing because prev instr not zero)
 			AND R6, R5, R3		# <= Expect 0x2222
@@ -16,7 +16,7 @@
 			SRA R10, R7, 0x4	# <= Expect 0xF889
 			LLB R11, 0xFE		# <= Expect 0xFFFE
 
-END_PROGRAM:
+END_PROGRAM:					# Expect R15 to hold address of JAL instruction + 1
 			HLT
-			AND R15, R15, R1	# <= This will only execute if the branch overshoots the hlt call
+			AND R14, R14, R1	# <= This will only execute if the branch overshoots the hlt call
 			HLT

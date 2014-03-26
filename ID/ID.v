@@ -3,7 +3,7 @@
 // This module is the top level module representing the ID stage.
 module ID(
 	// Output
-	p0, p1, shamt, func, src1sel, hlt, imm8, br_ctrl, new_pc,
+	p0, p1, shamt, func, src1sel, hlt, imm8, alt_pc_ctrl, alt_pc,
 	// Input
 	instr, pc, clk, rst_n, N, Z, V, dst);
 	
@@ -12,13 +12,14 @@ module ID(
 	input clk, rst_n, N, Z, V;
 	
 	// Outputs //
- 	output [15:0] p0, p1, new_pc;
+ 	output [15:0] p0, p1, alt_pc;
 	output [7:0] imm8;
 	output [3:0] shamt;
 	output [2:0] func;
-	output hlt, src1sel, br_ctrl;
+	output hlt, src1sel, alt_pc_ctrl;
 	
 	// Local Wires //
+	wire [15:0] dst_lcl, jump_reg;
 	wire [3:0] p0_addr, p1_addr, dst_addr;
 	wire re0, re1, we, hlt_lcl;
 	
@@ -26,11 +27,12 @@ module ID(
 							.instr(instr),
 							.N(N),
 							.Z(Z),
-							.V(V),
+							.V(V), 
 							.PC(pc),
+							.jump_reg(jump_reg),
 							// Outputs
-							.new_pc(new_pc),
-							.br_ctrl(br_ctrl),
+							.alt_pc(alt_pc),
+							.alt_pc_ctrl(alt_pc_ctrl),
 							.p0_addr(p0_addr),
 							.re0(re0),
 							.p1_addr(p1_addr),
@@ -51,11 +53,13 @@ module ID(
 				.p1_addr(p1_addr), 
 				.re0(re0), .re1(re1), 
 				.dst_addr(dst_addr), 
-				.dst(dst), 
+				.dst(dst_lcl), 
 				.we(we), 
 				.hlt(hlt_lcl)
 			);
-			
+	
+	assign dst_lcl = (alt_pc_ctrl)	?	(pc+1)	:	dst;
+	assign jump_reg = p0; 	
 	assign hlt = hlt_lcl;
 							
 endmodule

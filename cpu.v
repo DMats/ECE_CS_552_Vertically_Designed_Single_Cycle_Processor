@@ -8,11 +8,11 @@ input clk, rst_n;
 output hlt;
 
 
-wire [15:0] instr_lcl, dst_lcl, src0_lcl, p1_lcl, new_pc_lcl, pc_lcl;
+wire [15:0] instr_lcl, dst_lcl, src0_lcl, p1_lcl, alt_pc_lcl, pc_lcl;
 wire [8:0] br_offset;
 wire [3:0] shamt_lcl;
 wire [2:0] func_lcl;
-wire hlt_lcl, src1sel_lcl, br_ctrl;
+wire hlt_lcl, src1sel_lcl, alt_pc_ctrl;
 wire N_lcl, Z_lcl, V_lcl;
 
 // Instantiate IF
@@ -24,8 +24,8 @@ IF instruction_fetch(
 	.clk(clk),
 	.rst_n(rst_n),
 	.hlt(hlt_lcl),
-	.br_ctrl(br_ctrl),
-	.new_pc(new_pc_lcl)
+	.alt_pc_ctrl(alt_pc_ctrl),
+	.alt_pc(alt_pc_lcl)
 	);
 
 // Instantiate ID
@@ -37,8 +37,8 @@ ID instruction_decode(
 	.func(func_lcl),
 	.src1sel(src1sel_lcl),
 	.hlt(hlt_lcl),
-	.br_ctrl(br_ctrl),
-	.new_pc(new_pc_lcl),
+	.alt_pc_ctrl(alt_pc_ctrl),
+	.alt_pc(alt_pc_lcl),
 	// Input
 	.instr(instr_lcl),
 	.pc(pc_lcl),
