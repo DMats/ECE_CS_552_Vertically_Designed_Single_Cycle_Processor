@@ -1,9 +1,11 @@
 // program_counter
 // Authors:  David Mateo, R. Scott Carson
-module PC(iaddr, clk, rst_n, hlt);
+module PC(iaddr, new_pc, br_ctrl, clk, rst_n, hlt);
 
 output reg [15:0] iaddr;
-input clk, rst_n, hlt;
+
+input wire [15:0] new_pc;
+input wire clk, rst_n, hlt, br_ctrl;
 
 wire [15:0] next_iaddr;
 
@@ -21,7 +23,9 @@ end
 
 // Combinational Logic
 ///////////////////////////////////////////////
-assign next_iaddr = (hlt) ? iaddr : iaddr + 1'b1;
+assign next_iaddr = (hlt) 		? 	iaddr : 
+					(br_ctrl)	?	new_pc:
+									iaddr + 1'b1;
 //////////////////////////////////////////////
 
 
