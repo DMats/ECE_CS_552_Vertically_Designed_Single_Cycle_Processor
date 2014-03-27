@@ -8,12 +8,7 @@
 module cpu_tb();
 
 reg clk, rst_n;
-wire hlt;  	// We think this should be a wire, but 
-				// There is a cyclic dependency on the hlt signal
-				// PC doesn't run because hlt floats
-				// ID never updates hlt signal because PC doesn't run
-				// PC receives hlt from ID
-
+wire hlt;
 
 cpu DUT(
 		.clk(clk),

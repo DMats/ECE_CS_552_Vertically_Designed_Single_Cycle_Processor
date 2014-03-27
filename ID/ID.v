@@ -2,8 +2,8 @@
 // Instruction Decode Stage
 // This module is the top level module representing the ID stage.
 module ID(
-	// Output
-	p0, p1, shamt, func, src1sel, hlt, imm8, alt_pc_ctrl, alt_pc,
+	// Output //
+	p0, p1, shamt, func, src1sel, hlt, imm8, alt_pc_ctrl, alt_pc, we_mem, re_mem, wb_sel,
 	// Input
 	instr, pc, clk, rst_n, N, Z, V, dst);
 	
@@ -17,6 +17,7 @@ module ID(
 	output [3:0] shamt;
 	output [2:0] func;
 	output hlt, src1sel, alt_pc_ctrl;
+	output we_mem, re_mem, wb_sel;
 	
 	// Local Wires //
 	wire [15:0] dst_lcl, jump_reg;
@@ -42,7 +43,11 @@ module ID(
 							.hlt(hlt_lcl),
 							.src1sel(src1sel),
 							.shamt(shamt),
-							.func(func)
+							.func(func),
+							.imm8(imm8),
+							.re_mem(re_mem),
+							.we_mem(we_mem),
+							.wb_sel(wb_sel)
 						);
 						
 	rf regF(
