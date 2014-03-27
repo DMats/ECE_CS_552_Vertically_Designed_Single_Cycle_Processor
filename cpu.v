@@ -92,5 +92,6 @@ WB write_back(
 	);
 
 assign hlt = hlt_lcl;
+assign sdata_lcl = p1_lcl;
 
 endmodule
