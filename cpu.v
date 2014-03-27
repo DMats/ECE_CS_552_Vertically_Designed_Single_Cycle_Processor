@@ -49,7 +49,7 @@ ID instruction_decode(
 	.N(N_lcl),
 	.Z(Z_lcl),
 	.V(V_lcl),
-	.dst(dst_lcl)
+	.dst(wb_data_lcl)
 	);
 
 // Instantiate EX

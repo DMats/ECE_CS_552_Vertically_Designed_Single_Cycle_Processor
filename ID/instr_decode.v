@@ -160,8 +160,8 @@ module I_DECODE(
 	assign we_mem = (opcode == swOp)	?	1'b1:
 											1'b0;
 
-	assign re_mem = (opcode == swOp)	?	1'b0:
-											1'b1;
+	assign re_mem = (opcode == lwOp)	?	1'b1:
+											1'b0;
 
 	assign wb_sel = (opcode == lwOp)	?   1'b0:
 											1'b1;
