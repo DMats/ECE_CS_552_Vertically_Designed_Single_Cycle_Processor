@@ -1,7 +1,3 @@
-`include "IF/IF.v"
-`include "ID/ID.v"
-`include "EX/EX.v"
-
 module cpu(hlt, clk, rst_n);
 
 input clk, rst_n;
