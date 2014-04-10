@@ -1,3 +1,5 @@
+// R Scott Carson and David Mateo
+
 module cache(
 	//Inputs
 	addr, wr_line, we, clk, rst_n,
