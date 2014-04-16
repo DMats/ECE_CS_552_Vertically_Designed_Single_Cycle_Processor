@@ -10,21 +10,20 @@ wire [15:0] instr_lcl, dst_lcl, src0_lcl, p1_lcl, alt_pc_lcl, pc_lcl,sdata_lcl, 
 wire [15:0] instr_IF_ID;
 wire [15:0] pc_IF_ID;
 
-// ID input flop wires
+// ID stage flop wires
 wire [15:0] instr_ID;
 wire [15:0]pc_ID;
-// ID output flop wires
 wire [15:0] p0_ID_EX, p1_ID_EX;
 wire [7:0] imm8_ID_EX;
 wire [3:0] shamt_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX;
 
-// EX input flop wires
+// EX stage flop wires
 wire [15:0] p0_EX, p1_EX;
 wire [3:0] shamt_EX;
 wire [2:0] func_EX;
-wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB
+wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB;
 
 wire [8:0] br_offset;
 wire [3:0] shamt_lcl;
@@ -34,7 +33,6 @@ wire N_lcl, Z_lcl, V_lcl;
 wire we_mem_lcl, re_mem_lcl, wb_sel_lcl;
 wire [7:0] imm8_lcl;
 
-// 
 
 // Instantiate IF
 IF instruction_fetch(	
@@ -48,6 +46,7 @@ IF instruction_fetch(
 	.alt_pc_ctrl(alt_pc_ctrl_IF),
 	.alt_pc(alt_pc_IF)
 	);
+
 	
 // IF_ID Flip Flop ////////////////////////////////////////////////////////////
 IF_ID IF_ID_FF(
@@ -62,6 +61,7 @@ IF_ID IF_ID_FF(
 	.stall(stall)
 	);
 ///////////////////////////////////////////////////////////////////////////////
+
 
 // Instantiate ID
 ID instruction_decode(	
@@ -88,6 +88,7 @@ ID instruction_decode(
 	.V(V_lcl),
 	.dst(wb_data_lcl)
 	);
+	
 	
 // ID_EX Flip Flop ////////////////////////////////////////////////////////////
 ID_EX ID_EX_FF(
@@ -116,6 +117,7 @@ ID_EX ID_EX_FF(
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
+
 // Instantiate EX
 EX execution(
 	// Output
@@ -134,26 +136,44 @@ EX execution(
 	.p1(p1_EX)
 	);
 	
+	
 // EX_MEM Flip Flop ///////////////////////////////////////////////////////////
 EX_MEM EX_MEM_FF(
 	// Outputs
-	
+	.we_mem_MEM(we_mem_MEM),
+	.re_mem_MEM(re_mem_MEM),
+	.alu_result_MEM(alu_result_MEM_WB),
+	.wb_sel_MEM(wb_sel_MEM_WB),
 	//Inputs
-	
+	.we_mem_EX(we_mem_EX_MEM),
+	.re_mem_EX(re_mem_EX_MEM),
+	.alu_result_EX(alu_result_EX);
+	.wb_sel_EX(wb_sel_EX_MEM_WB);
+	.clk(clk),
+	.rst_n(rst_n),
+	.stall(stall)
 	);
 ///////////////////////////////////////////////////////////////////////////////
+
+
 MEM memory(
 	// Output
-	.ldata(ldata_lcl),
-	.alu_result(alu_result_lcl),
+	.ldata(ldata_MEM_WB),
+	.alu_result(alu_result_MEM_WB),
 	// Input
-	.sdata(sdata_lcl),
-	.re_mem(re_mem_lcl),
-	.we_mem(we_mem_lcl),
+	.sdata(sdata_MEM),
+	.re_mem(re_mem_MEM),
+	.we_mem(we_mem_MEM),
 	.clk(clk),
-	.addr(dst_lcl)
+	.addr(addr_mem_MEM)
 	);
+	
 
+// MEM_WB Flip Flop ///////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+
+	
 WB write_back(
 	// Output
 	.wb_data(wb_data_lcl),
@@ -162,6 +182,7 @@ WB write_back(
 	.rd_data(ldata_lcl),
 	.alu_result(alu_result_lcl)
 	);
+	
 
 assign hlt = hlt_lcl;
 assign sdata_lcl = p1_lcl;
