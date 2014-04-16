@@ -1,10 +1,16 @@
 @0000 BA00	// llb R10, 0x00
 @0001 B111	// llb R1, 0x11
-@0002 B211	// llb R2, 0x11
-@0003 2312	// sub R3, R1, R2
-@0004 C202	// b eq, Pass1
-@0005 BAFF	// Fail1:	llb R10, 0xFF
-@0006 F000	// hlt
-@0007 BAAA	// Pass1:	llb R10, 0xAA
-@0008 AAAA	// lhb R10, 0xAA
-@0009 F000	// hlt
+@0002 B222	// llb R2, 0x22
+@0003 9110	// sw  R1, R1, 0
+@0004 9220	// sw  R2, R2, 0
+@0005 8310	// lw  R3, R1, 0
+@0006 8420	// lw  R4, R2, 0
+@0007 0543	// add R5, R4, R3
+@0008 B633	// llb R6, 0x33
+@0009 2765	// sub R7, R6, R5
+@000a C202	// b eq, Pass
+@000b BAFF	// Fail:	llb R10, 0xFF
+@000c F000	// hlt
+@000d BAAA	// Pass:	llb R10, 0xAA
+@000e AAAA	// lhb R10, 0xAA
+@000f F000	// hlt
