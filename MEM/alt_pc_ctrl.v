@@ -2,13 +2,15 @@
 // Author:  David Mateo
 // This module creates the alt_pc_ctrl signal that is fed back into the IF 
 // stage.
-module alt_pc_ctrl(opcode, br_cond);
+module alt_pc_ctrl(opcode, br_cond, N, Z, V, alt_pc_ctrl);
 
 	input [3:0] opcode;
-	input [3:0] br_cond;
+	input [2:0] br_cond;
 	input N, Z, V;
 
 	output alt_pc_ctrl;
+
+	wire br_ctrl, jr_ctrl, jal_ctrl;
 
 	// Relevant Opcodes
 	localparam bOp = 4'b1100;
@@ -38,7 +40,7 @@ module alt_pc_ctrl(opcode, br_cond);
 
 	assign jr_ctrl 		= 	(opcode==jrOp);
 
-	assign jalOp 		= 	(opcode==jalOp);
+	assign jal_ctrl		= 	(opcode==jalOp);
 
 	assign alt_pc_ctrl 	= 	((br_ctrl)|(jal_ctrl)|(jr_ctrl));
 
