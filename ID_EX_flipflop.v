@@ -30,6 +30,7 @@ module ID_EX_FF(p0_EX, p1_EX, shamt_EX, func_EX, imm8_EX, we_mem_EX, re_mem_EX,
 			imm8_EX <= 8'h00;
 			shamt_EX <= 4'h0;
 			func_EX <= 3'b000;
+			we_rf_EX <= 1'b0;
 			we_mem_EX <= 1'b0;
 			re_mem_EX <= 1'b0;
 			wb_sel_EX <= 1'b0;

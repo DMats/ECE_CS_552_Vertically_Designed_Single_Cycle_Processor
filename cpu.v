@@ -4,64 +4,55 @@ input clk, rst_n;
 output hlt;
 
 
-wire [15:0] instr_lcl, dst_lcl, src0_lcl, p1_lcl, alt_pc_lcl, pc_lcl,sdata_lcl, ldata_lcl, alu_result_lcl, wb_data_lcl;
+/************************ IF *************************************************/
 
-// IF output flop wires
-wire [15:0] instr_IF_ID;
-wire [15:0] pc_IF_ID;
-
-// ID stage flop wires
-wire [15:0] instr_ID;
-wire [15:0]pc_ID;
-wire [15:0] p0_ID_EX, p1_ID_EX;
-wire [7:0] imm8_ID_EX;
-wire [3:0] shamt_ID_EX;
-wire [2:0] func_ID_EX;
-wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX;
-
-// EX stage flop wires
-wire [15:0] p0_EX, p1_EX;
-wire [3:0] shamt_EX;
-wire [2:0] func_EX;
-wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB;
-
-wire [8:0] br_offset;
-wire [3:0] shamt_lcl;
-wire [2:0] func_lcl;
-wire hlt_lcl, src1sel_lcl, alt_pc_ctrl;
-wire N_lcl, Z_lcl, V_lcl;
-wire we_mem_lcl, re_mem_lcl, wb_sel_lcl;
-wire [7:0] imm8_lcl;
-
+// IF stage wires
+wire [15:0] instr_IF_ID_EX;
+wire [15:0] pc_IF_ID_EX_MEM_WB;
 
 // Instantiate IF
 IF instruction_fetch(	
 	// Output
-	.instr(instr_IF_ID),
-	.pc(pc_IF_ID),
+	.instr(instr_IF_ID_EX),
+	.pc(pc_IF_ID_EX_MEM_WB),
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
-	.hlt(hlt_IF),
-	.alt_pc_ctrl(alt_pc_ctrl_IF),
-	.alt_pc(alt_pc_IF)
+	.hlt(hlt),
+	.alt_pc_ctrl(alt_pc_ctrl),
+	.alt_pc(alt_pc)
 	);
-
+/************************ IF *************************************************/
+	
+	
 	
 // IF_ID Flip Flop ////////////////////////////////////////////////////////////
 IF_ID IF_ID_FF(
 	// Output
-	.instr_ID(instr_ID),
-	.pc_ID(pc_ID),
+	.instr_ID(instr_ID_EX),
+	.pc_ID(pc_ID_EX_MEM_WB),
 	// Inputs
-	.instr_IF(instr_IF_ID),
-	.pc_IF(pc_IF_ID),
+	.instr_IF(instr_IF_ID_EX),
+	.pc_IF(pc_IF_ID_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
 	.stall(stall)
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
+
+
+/************************ ID *************************************************/
+
+// ID stage wires
+wire [15:0] instr_ID_EX;
+wire [15:0]pc_ID_EX_MEM_WB;
+wire [15:0] p0_ID_EX, p1_ID_EX;
+wire [7:0] imm8_ID_EX;
+wire [3:0] shamt_ID_EX;
+wire [2:0] func_ID_EX;
+wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
+	we_rf_EX_MEM_WB;
 
 // Instantiate ID
 ID instruction_decode(	
@@ -71,23 +62,22 @@ ID instruction_decode(
 	.shamt(shamt_ID_EX),
 	.func(func_ID_EX),
 	.src1sel(src1sel_ID_EX),
-	.hlt(hlt_lcl),
-	.alt_pc_ctrl(alt_pc_ctrl),
-	.alt_pc(alt_pc_lcl),
+	.hlt(hlt),
 	.imm8(imm8_ID_EX),
+	.we_rf(we_rf_EX_MEM_WB),
 	.we_mem(we_mem_ID_EX_MEM),
 	.re_mem(re_mem_ID_EX_MEM),
 	.wb_sel(wb_sel_ID_EX_MEM_WB),
 	// Input
-	.instr(instr_ID),
-	.pc(pc_ID),
+	.instr(instr_ID_EX),
+	.pc(pc_ID_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
-	.N(N_lcl),
-	.Z(Z_lcl),
-	.V(V_lcl),
-	.dst(wb_data_lcl)
+	.dst(wb_data)
 	);
+	
+/************************ ID *************************************************/
+	
 	
 	
 // ID_EX Flip Flop ////////////////////////////////////////////////////////////
@@ -100,16 +90,19 @@ ID_EX ID_EX_FF(
 	.imm8_EX(imm8_EX),
 	.we_mem_EX(we_mem_EX_MEM),
 	.re_mem_EX(re_mem_EX_MEM),
-	.wb_sel_EX(wb_sel_EX_MEM),
+	.wb_sel_EX(wb_sel_EX_MEM_WB),
+	.src1sel_EX(src1sel_EX),
+	.instr_EX(instr_EX),
+	.pc_EX(pc_EX_MEM_WB),
 	// Input
 	.p0_ID(p0_ID_EX),
 	.p1_ID(p1_ID_EX),
 	.shamt_ID(shamt_ID_EX),
 	.func_ID(func_ID_EX),
 	.imm8_ID(imm8_ID_EX),
-	.we_mem_ID(we_mem_ID_EX),
-	.re_mem_ID(re_mem_ID_EX),
-	.wb_sel_ID(wb_sel_ID_EX),
+	.we_mem_ID(we_mem_ID_EX_MEM),
+	.re_mem_ID(re_mem_ID_EX_MEM),
+	.wb_sel_ID(wb_sel_ID_EX_MEM_WB),
 	.src1sel_ID(src1sel_ID_EX),
 	.clk(clk),
 	.rst_n(rst_n),
@@ -118,13 +111,24 @@ ID_EX ID_EX_FF(
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+/************************ EX *************************************************/
+
+// EX stage wires
+wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, pc_EX_MEM_WB;
+wire [7:0] imm8_EX;
+wire [3:0] shamt_EX;
+wire [2:0] func_EX;
+wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB;
+
+
 // Instantiate EX
 EX execution(
 	// Output
-	.dst(dst_lcl),
-	.N(N_lcl),
-	.Z(Z_lcl),
-	.V(V_lcl),
+	.dst(alu_result_EX_MEM_WB),
+	.N(N_EX_MEM),
+	.Z(Z_EX_MEM),
+	.V(V_EX_MEM),
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
@@ -136,15 +140,23 @@ EX execution(
 	.p1(p1_EX)
 	);
 	
+assign sdata_EX_MEM = p0_EX;
+assign jump_reg_EX = P0_EX;
+
+/************************ EX *************************************************/
+
+
 	
 // EX_MEM Flip Flop ///////////////////////////////////////////////////////////
 EX_MEM EX_MEM_FF(
 	// Outputs
+	.sdata_MEM(sdata_MEM),
 	.we_mem_MEM(we_mem_MEM),
 	.re_mem_MEM(re_mem_MEM),
 	.alu_result_MEM(alu_result_MEM_WB),
 	.wb_sel_MEM(wb_sel_MEM_WB),
 	//Inputs
+	.sdata_EX(sdata_EX_MEM),
 	.we_mem_EX(we_mem_EX_MEM),
 	.re_mem_EX(re_mem_EX_MEM),
 	.alu_result_EX(alu_result_EX_MEM_WB);
@@ -155,6 +167,9 @@ EX_MEM EX_MEM_FF(
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
+
+
+/************************ MEM *************************************************/
 
 MEM memory(
 	// Output
@@ -168,6 +183,11 @@ MEM memory(
 	.addr(addr_mem_MEM)
 	);
 	
+assign addr_mem_MEM = alu_result_MEM_WB;
+	
+/************************ MEM *************************************************/
+
+
 
 // MEM_WB Flip Flop ///////////////////////////////////////////////////////////
 MEM_WB MEM_WB_FF(
@@ -185,7 +205,11 @@ MEM_WB MEM_WB_FF(
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
-	
+
+
+/************************ WB *************************************************/
+wire [15:0] wb_data;
+
 WB write_back(
 	// Output
 	.wb_data(wb_data),
@@ -195,8 +219,6 @@ WB write_back(
 	.alu_result(alu_result_WB)
 	);
 	
-
-assign hlt = hlt_lcl;
-assign sdata_lcl = p1_lcl;
+/************************ WB *************************************************/
 
 endmodule
