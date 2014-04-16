@@ -4,18 +4,18 @@
 
 module I_DECODE(
 	//Inputs
-	instr, PC, jump_reg, 
+	instr, PC, 
 	//Outputs
-	alt_pc, alt_pc_ctrl, jal_pc, p0_addr, re0, p1_addr, re1, dst_addr, we_rf, hlt, src1sel, shamt, func, imm8, we_mem, re_mem, wb_sel);
+	p0_addr, re0, p1_addr, re1, dst_addr, we_rf, hlt, src1sel, shamt, func, imm8, 
+	we_mem, re_mem, wb_sel, j_ctrl);
 
 	// Inputs
-	input[15:0] instr, PC, jump_reg;
+	input[15:0] instr, PC;
 
 	// Outputs
 	output [3:0] p0_addr, p1_addr, dst_addr, shamt;
 	output [2:0] func;
-	output hlt, src1sel, re0, re1, we_rf, alt_pc_ctrl;
-	output [15:0] alt_pc, jal_pc;
+	output hlt, src1sel, re0, re1, we_rf;
 	output [7:0] imm8;
 	output we_mem, re_mem, wb_sel;
 	

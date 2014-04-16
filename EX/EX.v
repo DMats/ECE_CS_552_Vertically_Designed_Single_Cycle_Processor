@@ -1,12 +1,11 @@
 // Author:  David Mateo
 // Execution Stage
 // CS/ECE 552, Spring 2014
-module EX(dst, N, Z, V, br_pc, br_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, sdata, instr);
+module EX(dst, N, Z, V, br_pc, br_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, instr);
 
 output wire [15:0] dst;
 output wire N, Z, V;
-output wire [15:0] sdata;
-output wire [15:0] alt_pc;
+output wire [15:0] br_pc;
 output wire br_ctrl;
 
 input wire clk, rst_n;
