@@ -20,6 +20,11 @@ wire [3:0] shamt_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX;
 
+// EX input flop wires
+wire [15:0] p0_EX, p1_EX;
+wire [3:0] shamt_EX;
+wire [2:0] func_EX;
+wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB
 
 wire [8:0] br_offset;
 wire [3:0] shamt_lcl;
@@ -121,14 +126,22 @@ EX execution(
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
-	.func(func_lcl),
-	.shamt(shamt_lcl),
-	.src1sel(src1sel_lcl),
-	.src0(src0_lcl),
-	.imm8(imm8_lcl),
-	.p1(p1_lcl)
+	.func(func_EX),
+	.shamt(shamt_EX),
+	.src1sel(src1sel_EX),
+	.src0(p0_EX),
+	.imm8(imm8_EX),
+	.p1(p1_EX)
 	);
-
+	
+// EX_MEM Flip Flop ///////////////////////////////////////////////////////////
+EX_MEM EX_MEM_FF(
+	// Outputs
+	
+	//Inputs
+	
+	);
+///////////////////////////////////////////////////////////////////////////////
 MEM memory(
 	// Output
 	.ldata(ldata_lcl),
