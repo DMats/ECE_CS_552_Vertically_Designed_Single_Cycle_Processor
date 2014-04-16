@@ -5,7 +5,7 @@ module ID(
 	// Output //
 	p0, p1, shamt, func, src1sel, hlt, imm8, alt_pc_ctrl, alt_pc, we_mem, re_mem, wb_sel,
 	// Input
-	instr, pc, clk, rst_n, N, Z, V, dst);
+	instr, pc, clk, rst_n, dst);
 	
 	// Inputs //
 	input [15:0] instr, dst, pc;
@@ -26,9 +26,6 @@ module ID(
 	
 	I_DECODE inst_decoder(	//Inputs
 							.instr(instr),
-							.N(N),
-							.Z(Z),
-							.V(V), 
 							.PC(pc),
 							.jump_reg(jump_reg),
 							// Outputs
@@ -63,7 +60,9 @@ module ID(
 				.hlt(hlt_lcl)
 			);
 	
+	// TODO:  Put this mux in WB
 	assign dst_lcl = (alt_pc_ctrl)	?	(pc+1)	:	dst;
+	///
 	assign jump_reg = p0; 	
 	assign hlt = hlt_lcl;
 							
