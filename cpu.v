@@ -147,7 +147,7 @@ EX_MEM EX_MEM_FF(
 	//Inputs
 	.we_mem_EX(we_mem_EX_MEM),
 	.re_mem_EX(re_mem_EX_MEM),
-	.alu_result_EX(alu_result_EX);
+	.alu_result_EX(alu_result_EX_MEM_WB);
 	.wb_sel_EX(wb_sel_EX_MEM_WB);
 	.clk(clk),
 	.rst_n(rst_n),
