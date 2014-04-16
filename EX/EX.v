@@ -1,7 +1,7 @@
 // Author:  David Mateo
 // Execution Stage
 // CS/ECE 552, Spring 2014
-module EX(dst, N, Z, V, alt_pc, br_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, sdata, instr);
+module EX(dst, N, Z, V, br_pc, br_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, sdata, instr);
 
 output wire [15:0] dst;
 output wire N, Z, V;
@@ -44,12 +44,11 @@ ALU arithmetic_logic_unit(
 	.rst_n(rst_n)
 	);
 
-alt_pc_calc AP(
+br_pc_calc BPC(
 	// Input
 	.instr(instr), 
-	.jump_reg(p0), 
 	// Output
-	.alt_pc(alt_pc)
+	.br_pc(br_pc)
 	);
 
 br_ctrl BC(
