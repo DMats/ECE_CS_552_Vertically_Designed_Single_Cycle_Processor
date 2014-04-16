@@ -1,21 +1,17 @@
-// alt_pc_ctrl module
+// br_ctrl module
 // Author:  David Mateo
-// This module creates the alt_pc_ctrl signal that is fed back into the IF 
+// This module creates the br_ctrl signal that is fed back into the IF 
 // stage.
-module alt_pc_ctrl(opcode, br_cond, N, Z, V, alt_pc_ctrl);
+module br_ctrl(opcode, br_cond, N, Z, V, br_ctrl);
 
 	input [3:0] opcode;
 	input [2:0] br_cond;
 	input N, Z, V;
 
-	output alt_pc_ctrl;
-
-	wire br_ctrl, jr_ctrl, jal_ctrl;
+	output br_ctrl;
 
 	// Relevant Opcodes
-	localparam bOp = 4'b1100;
-	localparam jalOp = 4'b1101;
-	localparam jrOp = 4'b1110;	
+	localparam bOp = 4'b1100;	
 
 	// Branch condition codes
 	localparam neq = 3'b000;
@@ -37,11 +33,5 @@ module alt_pc_ctrl(opcode, br_cond, N, Z, V, alt_pc_ctrl);
 							((br_cond==ovfl)&&(V==1'b1))			||
 							((br_cond==uncond)))		?	1'b1	:	
 															1'b0	;
-
-	assign jr_ctrl 		= 	(opcode==jrOp);
-
-	assign jal_ctrl		= 	(opcode==jalOp);
-
-	assign alt_pc_ctrl 	= 	((br_ctrl)|(jal_ctrl)|(jr_ctrl));
 
 endmodule

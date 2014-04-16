@@ -1,13 +1,13 @@
 // Author:  David Mateo
 // Execution Stage
 // CS/ECE 552, Spring 2014
-module EX(dst, N, Z, V, alt_pc, alt_pc_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, sdata, instr);
+module EX(dst, N, Z, V, alt_pc, br_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, sdata, instr);
 
 output wire [15:0] dst;
 output wire N, Z, V;
 output wire [15:0] sdata;
 output wire [15:0] alt_pc;
-output wire alt_pc_ctrl;
+output wire br_ctrl;
 
 input wire clk, rst_n;
 input wire [15:0] p0, p1, instr;
@@ -52,7 +52,7 @@ alt_pc_calc AP(
 	.alt_pc(alt_pc)
 	);
 
-alt_pc_ctrl APC(
+br_ctrl BC(
 	// Input
 	.opcode(instr[15:12]),
 	.br_cond(instr[11:9]),
@@ -60,7 +60,7 @@ alt_pc_ctrl APC(
 	.Z(Z),
 	.V(V),
 	// Output
-	.alt_pc_ctrl(alt_pc_ctrl)
+	.br_ctrl(br_ctrl)
 	);
 
 assign sdata = p1;
