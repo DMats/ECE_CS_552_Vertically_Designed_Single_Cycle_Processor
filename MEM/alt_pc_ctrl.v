@@ -35,8 +35,8 @@ module alt_pc_ctrl(opcode, br_cond, N, Z, V, alt_pc_ctrl);
 							((br_cond==gte)&&(N==1'b0))				||
 							((br_cond==lte)&&(N==1'b1)&&(Z==1'b1))	||
 							((br_cond==ovfl)&&(V==1'b1))			||
-							((br_cond==uncond)))	?	instr[8:0]	:	
-													9'hxxx;
+							((br_cond==uncond)))		?	1'b1	:	
+															1'b0	;
 
 	assign jr_ctrl 		= 	(opcode==jrOp);
 
