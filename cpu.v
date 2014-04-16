@@ -131,7 +131,7 @@ EX execution(
 	.func(func_EX),
 	.shamt(shamt_EX),
 	.src1sel(src1sel_EX),
-	.src0(p0_EX),
+	.p0(p0_EX),
 	.imm8(imm8_EX),
 	.p1(p1_EX)
 	);
@@ -170,17 +170,29 @@ MEM memory(
 	
 
 // MEM_WB Flip Flop ///////////////////////////////////////////////////////////
-
+MEM_WB MEM_WB_FF(
+	// Outputs
+	.ldata_WB(ldata_WB),
+	.alu_result_WB(alu_result_WB),
+	.wb_sel_WB(wb_sel_WB),
+	// Inputs
+	.ldata_MEM(ldata_MEM_WB),
+	.alu_result_MEM(alu_result_MEM_WB),
+	.wb_sel_MEM(wb_sel_MEM_WB)
+	.clk(clk),
+	.rst_n(rst_n),
+	.stall(stall)
+	);
 ///////////////////////////////////////////////////////////////////////////////
 
 	
 WB write_back(
 	// Output
-	.wb_data(wb_data_lcl),
+	.wb_data(wb_data),
 	// Input
-	.wb_sel(wb_sel_lcl),
-	.rd_data(ldata_lcl),
-	.alu_result(alu_result_lcl)
+	.wb_sel(wb_sel_WB),
+	.rd_data(ldata_WB),
+	.alu_result(alu_result_WB)
 	);
 	
 
