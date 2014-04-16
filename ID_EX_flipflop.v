@@ -1,27 +1,28 @@
 module ID_EX_FF(p0_EX, p1_EX, shamt_EX, func_EX, imm8_EX, we_mem_EX, re_mem_EX,
-	wb_sel_EX, src1sel_EX, p0_ID, p1_ID, shamt_ID, func_ID, we_mem_ID, re_mem_ID, 
-	wb_sel_ID, src1sel_ID, clk, rst_n, stall);
+	wb_sel_EX, src1sel_EX, we_rf_EX, p0_ID, p1_ID, shamt_ID, func_ID, we_mem_ID, re_mem_ID, 
+	wb_sel_ID, src1sel_ID, we_rf_ID, clk, rst_n, stall);
 	
 	// Inputs
 	input wire [15:0] p0_ID, p1_ID;
 	input wire [7:0] imm8_ID;
 	input wire [3:0] shamt_ID;
 	input wire [2:0] func_ID;
-	input wire we_mem_ID, re_mem_ID, wb_sel_ID, src1sel_ID, clk, rst_n, stall;
+	input wire we_mem_ID, re_mem_ID, wb_sel_ID, src1sel_ID, clk, rst_n, stall,
+		we_rf_ID;
 	
 	// Outputs
 	output reg [15:0] p0_EX, p1_EX;
 	output reg [7:0] imm8_EX;
 	output reg [3:0] shamt_EX;
 	output reg [2:0] func_EX;
-	output reg we_mem_EX, re_mem_EX, wb_sel_EX, src1sel_EX;
+	output reg we_mem_EX, re_mem_EX, wb_sel_EX, src1sel_EX, we_rf_EX;
 	
 	// Local Wires
 	wire [15:0] next_p0, next_p1;
 	wire [7:0] next_imm8;
 	wire [3:0] next_shamt;
 	wire [2:0] next_func;
-	wire next_we_mem, next_re_mem, next_wb_sel, next_src1sel;
+	wire next_we_mem, next_re_mem, next_wb_sel, next_src1sel, next_we_rf_EX;
 	
 	always@(posedge clk, negedge rst_n)begin
 		if(~rst_n)begin
@@ -42,6 +43,7 @@ module ID_EX_FF(p0_EX, p1_EX, shamt_EX, func_EX, imm8_EX, we_mem_EX, re_mem_EX,
 			imm8_EX <= next_imm8;
 			shamt_EX <= next_shamt;
 			func_EX <= next_func;
+			we_rf_EX <= next_we_rf_EX;
 			we_mem_EX <= next_we_mem;
 			re_mem_EX <= next_re_mem;
 			wb_sel_EX <= next_wb_sel;
