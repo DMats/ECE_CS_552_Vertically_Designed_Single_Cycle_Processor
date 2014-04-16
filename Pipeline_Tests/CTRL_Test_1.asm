@@ -10,11 +10,11 @@
 		llb R1, 0x11		# R1 has 0x0011
 		llb R2, 0x11		# R2 has 0x0011
 
-		# Perform addition using the registers that were just written to.
+		# Perform subtraction using the registers that were just written to.
 		sub R3, R1, R2		# R3 has 0x0000
 
-		# Setup output comparison
-		b eq, Pass1				# R3 has 0x0033
+		# Perform branch
+		b eq, Pass1			
 
 		# Failure
 Fail1:	llb R10, 0xFF		# R10 has 0xFFFF (failure)
