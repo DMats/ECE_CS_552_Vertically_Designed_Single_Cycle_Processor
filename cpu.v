@@ -87,7 +87,7 @@ ID instruction_decode(
 	.rst_n(rst_n),
 	.dst(wb_data_WB),
 	.dst_addr(dst_addr_WB)
-	.we_WB(we_rf_WE);
+	.we_WB(we_rf_WB);
 	);
 	
 /************************ ID *************************************************/

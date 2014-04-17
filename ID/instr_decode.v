@@ -4,10 +4,23 @@
 
 module I_DECODE(
 	//Inputs
-	instr, PC, 
+	instr, 
+	PC, 
 	//Outputs
-	p0_addr, re0, p1_addr, re1, dst_addr, we_rf, hlt, src1sel, shamt, func, imm8, 
-	we_mem, re_mem, wb_sel, j_ctrl);
+	p0_addr, 
+	re0, 
+	p1_addr, 
+	re1, 
+	dst_addr, 
+	we_rf, 
+	hlt, 
+	src1sel, 
+	shamt, 
+	func, 
+	imm8, 
+	we_mem, 
+	re_mem, 
+	wb_sel);
 
 	// Inputs
 	input[15:0] instr, PC;
@@ -63,9 +76,6 @@ module I_DECODE(
 	// Halt Case //
 	assign hlt = 	(opcode == hltOp)	?	(1'b1):
 											(1'b0);
-
-	// Pull down hlt to prevent cyclic dependency between ID and PC
-	//pulldown(hlt);
 
 	// Extract all needed signals and then MUX them to output proper controls
 	assign dst_addr = 	(opcode == jalOp)		?	4'b1111:
