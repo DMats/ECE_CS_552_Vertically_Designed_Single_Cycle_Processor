@@ -20,10 +20,10 @@ wire [15:0] src1_lcl;
 // Instantiate src_mux
 src_mux source_mux(
 	// Output
-	.p1(p1), 
-	// Input
-	.imm8(imm8), 
 	.src1(src1_lcl), 
+	// Input
+	.p1(p1), 
+	.imm8(imm8), 
 	.src1sel(src1sel)
 	);
 
