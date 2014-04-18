@@ -44,10 +44,13 @@ IF_ID IF_ID_FF(
 	.instr_IF(instr_IF_ID_EX),
 	.pc_IF(pc_IF_ID_EX),
 	.clk(clk),
-	.rst_n(rst_n),
-	.stall(stall)
+	.rst_n(rst_n_IF_ID),
+	.stall(stall_IF_ID)
 	);
+	
+	assign rst_n_IF_ID = (~br_ctrl_EX & rst_n) ? 1'b1 : 1'b0;
 ///////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -125,7 +128,7 @@ ID_EX ID_EX_FF(
 	.pc_ID(pc_ID_EX),
 	.clk(clk),
 	.rst_n(rst_n),
-	.stall(stall)
+	.stall(stall_ID_EX)
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -196,7 +199,7 @@ EX_MEM EX_MEM_FF(
 	.dst_addr_EX(dst_addr_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
-	.stall(stall)
+	.stall(stall_EX_MEM)
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -242,7 +245,7 @@ MEM_WB MEM_WB_FF(
 	.dst_addr_MEM(dst_addr_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
-	.stall(stall)
+	.stall(stall_MEM_WB)
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -280,9 +283,14 @@ FCU forwarding_control_unit(
 ///////////////////////////////////////////////////////////////////////////////
 
 // HDU ////////////////////////////////////////////////////////////////////////
+wire stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB;
+
 HDU hazard_detection_unit(
 	// Output
-	.stall(stall),
+	.stall_IF_ID(stall_IF_ID),
+	.stall_ID_EX(stall_ID_EX),
+	.stall_EX_MEM(stall_EX_MEM),
+	.stall_MEM_WB(stall_MEM_WB),
 	// Input
 	.clk(clk), 
 	.rst_n(rst_n), 
