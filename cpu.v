@@ -264,4 +264,30 @@ WB write_back(
 	
 /************************ WB *************************************************/
 
+// FCU ////////////////////////////////////////////////////////////////////////
+FCU forwarding_control_unit(
+	// Output
+	.ForwardA(ForwardA),
+	.ForwardB(ForwardB),
+	// Input
+	.EX_MEM_RegWrite(we_rf_MEM_WB), 
+	.EX_MEM_RegisterRd(dst_addr_MEM_WB), 
+	.ID_EX_RegisterRs(instr_EX[7:4]),
+	.ID_EX_RegisterRt(instr_EX[3:0]),
+	.MEM_WB_RegWrite(we_rf_WB),
+	.MEM_WB_RegisterRd(dst_addr_WB),
+	);
+///////////////////////////////////////////////////////////////////////////////
+
+// HDU ////////////////////////////////////////////////////////////////////////
+HDU hazard_detection_unit(
+	// Output
+	.stall(stall),
+	// Input
+	.clk(clk), 
+	.rst_n(rst_n), 
+	.instr(instr_ID_EX) 
+	);
+///////////////////////////////////////////////////////////////////////////////
+
 endmodule
