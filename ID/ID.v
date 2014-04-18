@@ -96,7 +96,7 @@ module ID(
 											  16'hxxxx;	
 
 	// Arguably, this statement could be in WB, but I decided to put it here.
-	assign dst_data = (instr[15:12] == jalOp)	?	(pc+1)	:	dst_dat_WB;
+	assign dst_data = (instr[15:12] == jalOp)	?	(pc+1)	:	dst_data_WB;
 
 	// The following line is duplicated inside of instr_decode but I copied it here too.
 	// I didn't remove the other one because unsure if it's necessary, but it has

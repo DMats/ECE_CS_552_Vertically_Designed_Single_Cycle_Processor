@@ -9,7 +9,7 @@ output wire [15:0] br_pc;
 output wire br_ctrl;
 
 input wire clk, rst_n;
-input wire [15:0] p0, p1, instr;
+input wire [15:0] p0, p1, instr, pc;
 input wire [7:0] imm8;
 input wire [3:0] shamt;
 input wire [2:0] func;
@@ -45,7 +45,8 @@ ALU arithmetic_logic_unit(
 
 br_pc_calc BPC(
 	// Input
-	.instr(instr), 
+	.instr(instr),
+	.pc(pc), 
 	// Output
 	.br_pc(br_pc)
 	);
