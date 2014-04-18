@@ -1,28 +1,53 @@
 // Author:  David Mateo
 // Execution Stage
 // CS/ECE 552, Spring 2014
-module EX(dst, N, Z, V, br_pc, br_ctrl, clk, rst_n, func, shamt, src1sel, p0, imm8, p1, instr);
+module EX(
+	// Output
+	dst, 
+	N, 
+	Z, 
+	V, 
+	br_pc, 
+	br_ctrl, 
+	sdata,
+	// Input
+	clk, 
+	rst_n, 
+	func, 
+	shamt, 
+	src1sel, 
+	p0, 
+	imm8, 
+	p1, 
+	instr,
+	forwardA,
+	forwardB,
+	alu_result_MEM_WB,
+	wb_data_WB
+	);
 
-output wire [15:0] dst;
+output wire [15:0] dst, sdata;
 output wire N, Z, V;
 output wire [15:0] br_pc;
 output wire br_ctrl;
 
 input wire clk, rst_n;
-input wire [15:0] p0, p1, instr, pc;
+input wire [15:0] p0, p1, instr, pc, alu_result_MEM_WB, wb_data_WB;
 input wire [7:0] imm8;
 input wire [3:0] shamt;
 input wire [2:0] func;
 input wire src1sel;
+input wire [1:0] forwardA, forwardB;
 
 wire [15:0] src1_lcl;
+wire [15:0] muxA, muxB;
 
 // Instantiate src_mux
 src_mux source_mux(
 	// Output
 	.src1(src1_lcl), 
 	// Input
-	.p1(p1), 
+	.p1(muxB), 
 	.imm8(imm8), 
 	.src1sel(src1sel)
 	);
@@ -37,7 +62,7 @@ ALU arithmetic_logic_unit(
 	// Input
 	.ops(func),
 	.src1(src1_lcl),
-	.src0(p0),
+	.src0(muxA),
 	.shamt(shamt),
 	.clk(clk),
 	.rst_n(rst_n)
@@ -63,5 +88,16 @@ br_ctrl BC(
 	);
 
 assign sdata = p1;
+
+// Forwarding Muxes
+assign muxA = 	(forwardA == 2'b10) ? 	alu_result_MEM_WB	:
+				(forwardA == 2'b01) ? 	wb_data_WB 			:
+				/*forwardA == 2'b00*/	p0;
+
+assign muxB = 	(forwardB == 2'b10) ?	alu_result_MEM_WB	:
+				(forwardB == 2'b01) ?	wb_data_WB 			:
+				/*forwardB == 2'b00*/	p1;
+
+//TODO:  WHAT IF FORWARDA/B == 2'b11  WHAT THEN???  IDK.  
 
 endmodule

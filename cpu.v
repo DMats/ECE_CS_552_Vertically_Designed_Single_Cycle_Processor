@@ -137,7 +137,7 @@ ID_EX ID_EX_FF(
 /************************ EX *************************************************/
 
 // EX stage wires
-wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, pc_EX, b_pc_EX;
+wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, pc_EX, b_pc_EX, sdata_EX_MEM;
 wire [7:0] imm8_EX;
 wire [3:0] shamt_EX, dst_addr_EX_MEM_WB;
 wire [2:0] func_EX;
@@ -154,6 +154,7 @@ EX execution(
 	.V(V_EX_MEM),
 	.br_pc(b_pc_EX),
 	.br_ctrl(b_ctrl_EX),
+	.sdata(sdata_EX_MEM),
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
@@ -164,10 +165,10 @@ EX execution(
 	.imm8(imm8_EX),
 	.p1(p1_EX),
 	.pc(pc_EX),
-	.instr(instr_EX)
+	.instr(instr_EX),
+	.alu_result_MEM_WB(alu_result_MEM_WB),
+	.wb_data_WB(wb_data_WB)
 	);
-	
-assign sdata_EX_MEM = p0_EX;
 
 /************************ EX *************************************************/
 
