@@ -1,7 +1,8 @@
 module cpu(hlt, pc, clk, rst_n);
 
 input clk, rst_n;
-output hlt, pc;
+output hlt;
+output [15:0] pc;
 
 /************************ IF *************************************************/
 
