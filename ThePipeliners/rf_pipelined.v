@@ -32,6 +32,7 @@ reg we_lat;								// have to capture we from previous cycle
 ///////////////////////////////////////////////////////
 initial begin
   mem[0] = 16'h0000;					// reg0 is always 0,
+  $readmemh("Debug/rfinit.txt",mem);
 end
 
 /*
