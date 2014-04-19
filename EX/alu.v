@@ -1,10 +1,11 @@
 // R Scott Carson
 // 16 bit ALU
-module ALU(ops, src1, src0, shamt, clk, rst_n, dst, N, Z, V;
+module ALU(ops, src1, src0, shamt, prev_br_ctrl, clk, rst_n, dst, N, Z, V;
 	input[2:0] ops;
 	input[15:0] src1, src0;
 	input[3:0] shamt;
 	input clk, rst_n;
+	input prev_br_ctrl;
 	
 	output[15:0] dst;
 	output N, Z, V;
@@ -59,6 +60,11 @@ module ALU(ops, src1, src0, shamt, clk, rst_n, dst, N, Z, V;
 			N <= 1'b0;
 			Z <= 1'b0;
 			V <= 1'b0;
+		end
+		else if (prev_br_ctrl && rst_n) begin
+			N <= N;
+			Z <= Z;
+			V <= V;
 		end
 		else begin
 			N <= n;

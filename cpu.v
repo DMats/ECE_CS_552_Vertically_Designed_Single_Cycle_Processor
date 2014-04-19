@@ -48,7 +48,7 @@ IF_ID IF_ID_FF(
 	.stall(stall_IF_ID)
 	);
 	
-	assign rst_n_IF_ID = (~br_ctrl_EX & rst_n) ? 1'b1 : 1'b0;
+	assign rst_n_IF_ID = (~b_ctrl_EX_MEM & rst_n) ? 1'b1 : 1'b0;
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -142,7 +142,7 @@ wire [7:0] imm8_EX;
 wire [3:0] shamt_EX, dst_addr_EX_MEM_WB;
 wire [2:0] func_EX;
 wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
-wire N_EX_MEM, Z_EX_MEM, V_EX_MEM, b_ctrl_EX;
+wire N_EX_MEM, Z_EX_MEM, V_EX_MEM, b_ctrl_EX_MEM;
 
 
 // Instantiate EX
@@ -153,7 +153,7 @@ EX execution(
 	.Z(Z_EX_MEM),
 	.V(V_EX_MEM),
 	.br_pc(b_pc_EX),
-	.br_ctrl(b_ctrl_EX),
+	.br_ctrl(b_ctrl_EX_MEM),
 	.sdata(sdata_EX_MEM),
 	// Input
 	.clk(clk),
@@ -167,7 +167,8 @@ EX execution(
 	.pc(pc_EX),
 	.instr(instr_EX),
 	.alu_result_MEM_WB(alu_result_MEM_WB),
-	.wb_data_WB(wb_data_WB)
+	.wb_data_WB(wb_data_WB),
+	.prev_br_ctrl(b_ctrl_MEM)
 	);
 
 /************************ EX *************************************************/
@@ -187,6 +188,7 @@ EX_MEM EX_MEM_FF(
 	.alu_result_MEM(alu_result_MEM_WB),
 	.wb_sel_MEM(wb_sel_MEM_WB),
 	.dst_addr_MEM(dst_addr_MEM_WB),
+	.b_ctrl_MEM(b_ctrl_MEM),
 	//Inputs
 	.sdata_EX(sdata_EX_MEM),
 	.we_rf_EX(we_rf_EX_MEM_WB),
@@ -198,6 +200,7 @@ EX_MEM EX_MEM_FF(
 	.alu_result_EX(alu_result_EX_MEM_WB),
 	.wb_sel_EX(wb_sel_EX_MEM_WB),
 	.dst_addr_EX(dst_addr_EX_MEM_WB),
+	.b_ctrl_EX(b_ctrl_EX_MEM),
 	.clk(clk),
 	.rst_n(rst_n),
 	.stall(stall_EX_MEM)
