@@ -20,4 +20,6 @@ llb R13, 0xDD
 llb R14, 0xEE
 llb R15, 0xFF
 
+add R1, R1, R1 			/// OHHHH SHITTTT.
+
 hlt

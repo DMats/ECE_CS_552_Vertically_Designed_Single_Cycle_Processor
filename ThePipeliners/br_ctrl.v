@@ -24,14 +24,14 @@ module br_ctrl(opcode, br_cond, N, Z, V, br_ctrl);
 	localparam uncond = 3'b111;
 
 	assign br_ctrl 		= 	((opcode==bOp)							&&
-							((br_cond==neq)&&(Z==1'b0)) 			|| 
+							(((br_cond==neq)&&(Z==1'b0)) 			|| 
 							((br_cond==eq)&&(Z==1'b1))				||
 							((br_cond==gt)&&(Z==1'b0)&&(N==1'b0))	||
 							((br_cond==lt)&&(N==1'b1))				||
 							((br_cond==gte)&&(N==1'b0))				||
 							((br_cond==lte)&&(N==1'b1)&&(Z==1'b1))	||
 							((br_cond==ovfl)&&(V==1'b1))			||
-							((br_cond==uncond)))		?	1'b1	:	
+							((br_cond==uncond))))		?	1'b1	:	
 															1'b0	;
 
 endmodule

@@ -16,6 +16,8 @@ module clk_and_rst_n;
 
     initial
     begin
+        $dumpfile("cpu_dump.vcd");
+        $dumpvars(0,clk_and_rst_n);
         rst_n = 1'b0;
         #3;
         rst_n = 1'b1;
