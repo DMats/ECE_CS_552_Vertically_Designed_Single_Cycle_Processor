@@ -8,8 +8,9 @@ llb R1, 0x11
 llb R2, 0x22
 
 sub R2, R2, R2
-b eq PASS
+b eq, PASS
 
+CONTINUE:
 llb R3, 0x33
 llb R4, 0x44
 llb R5, 0x55
@@ -27,4 +28,6 @@ hlt
 
 PASS:
 add R1, R1, R1 			/// OHHHH SHITTTT.
+b neq, CONTINUE
+
 hlt
