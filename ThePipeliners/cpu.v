@@ -31,7 +31,7 @@ IF instruction_fetch(
 						(b_ctrl_EX_MEM) ? b_pc_EX:
 										16'hxxxx;
 
-	assign pc = pc_ID_EX;
+	assign pc = pc_IF_ID_EX;
 	assign hlt = hlt_WB;
 	
 /************************ IF *************************************************/
@@ -69,7 +69,7 @@ wire [7:0] imm8_ID_EX;
 wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
-	we_rf_ID_EX_MEM_WB, j_ctrl_ID, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX;
+	we_rf_ID_EX_MEM_WB, j_ctrl_ID, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, hlt_ID_EX_MEM_WB_CTRL;
 
 // Instantiate ID
 ID instruction_decode(	
@@ -79,7 +79,7 @@ ID instruction_decode(
 	.shamt(shamt_ID_EX),
 	.func(func_ID_EX),
 	.src1sel(src1sel_ID_EX),
-	.hlt(hlt_ID_EX_MEM_WB),
+	.hlt(hlt_ID_EX_MEM_WB_CTRL),
 	.imm8(imm8_ID_EX),
 	.we_rf(we_rf_ID_EX_MEM_WB),
 	.we_mem(we_mem_ID_EX_MEM),
@@ -98,6 +98,8 @@ ID instruction_decode(
 	.we_WB(we_rf_WB),
 	.hlt_WB(hlt_WB)
 	);
+	
+	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM);
 	
 /************************ ID *************************************************/
 	
@@ -153,7 +155,7 @@ wire [7:0] imm8_EX;
 wire [3:0] shamt_EX, dst_addr_EX_MEM_WB;
 wire [2:0] func_EX;
 wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
-wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM;
+wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, b_ctrl_EX;
 wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
 
 localparam addzOp = 4'b0001;

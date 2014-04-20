@@ -6,9 +6,10 @@
 //llb R0, 0xFF 		// R0 has 0x0000
 llb R1, 0x11
 llb R2, 0x22
-
+hlt
 sub R2, R2, R2
 b eq, PASS
+
 
 CONTINUE:
 llb R3, 0x33

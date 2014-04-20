@@ -10,13 +10,15 @@ module br_pc_calc(instr, pc, br_pc);
 	output [15:0] br_pc;
 
 	wire [3:0] opcode;
-	wire [8:0] br_offset;
+	wire [15:0] br_offset;
 
 	// Relevant Opcodes
 	localparam bOp = 4'b1100;
 
 	assign opcode = instr[15:12];
-	assign br_offset = instr[8:0];
+	assign br_offset = {{7{instr[8]}}, instr[8:0]};
+	
+
 
 	assign br_pc = (opcode==bOp) 	? pc + br_offset :
 									16'hxxxx;
