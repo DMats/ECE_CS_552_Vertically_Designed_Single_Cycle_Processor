@@ -102,5 +102,7 @@ assign muxB = 	(forwardB == 2'b10) ?	alu_result_MEM_WB	:
 				/*forwardB == 2'b00*/	p1;
 
 //TODO:  WHAT IF FORWARDA/B == 2'b11  WHAT THEN???  IDK.  
+// Figured it out.  2'b01 will only ever be set if 2'b10 is not set.
+// They are mutually exclusive.
 
 endmodule
