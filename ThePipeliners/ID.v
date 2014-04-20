@@ -85,13 +85,17 @@ module ID(
 				.we(we_WB), 
 				.hlt(hlt_WB)
 			);
+			
+	jump_controller j_controller(
+		//inputs
+		
 
 	// The Jump logic below is necessary because as soon as we know 
 	// that we're jumping, we want to process it immediately without
 	// sending it through the EX stage and beyond.  This makes it so no
 	// flushes are necessary on jumps.		
 	assign j_ctrl = ((instr[15:12] == jalOp)||(instr[15:12] == jrOp));
-	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+{{4{instr[11]}}, instr[11:0]}):
+	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+JR_REG):
 					(instr[15:12] == jrOp) 	? p0:
 											  16'hxxxx;	
 
