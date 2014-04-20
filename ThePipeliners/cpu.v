@@ -26,8 +26,8 @@ IF instruction_fetch(
 	.alt_pc(alt_pc_IF)
 	);
 	
-	assign alt_pc_ctrl_IF = (j_ctrl_ID || b_ctrl_EX_MEM);
-	assign alt_pc_IF = 	(j_ctrl_ID) ? j_pc_ID:
+	assign alt_pc_ctrl_IF = (j_ctrl_ID_EX | b_ctrl_EX_MEM);
+	assign alt_pc_IF = 	(j_ctrl_ID_EX) ? j_pc_ID:
 						(b_ctrl_EX_MEM) ? b_pc_EX:
 										16'hxxxx;
 
@@ -69,7 +69,8 @@ wire [7:0] imm8_ID_EX;
 wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
-	we_rf_ID_EX_MEM_WB, j_ctrl_ID, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, hlt_ID_EX_MEM_WB_CTRL;
+	we_rf_ID_EX_MEM_WB, j_ctrl_ID, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
+	hlt_ID_EX_MEM_WB_CTRL, j_ctrl_ID_EX;
 
 // Instantiate ID
 ID instruction_decode(	
@@ -87,7 +88,7 @@ ID instruction_decode(
 	.wb_sel(wb_sel_ID_EX_MEM_WB),
 	.dst_addr_new(dst_addr_ID_EX_MEM_WB),
 	.j_pc(j_pc_ID),
-	.j_ctrl(j_ctrl_ID),
+	.j_ctrl(j_ctrl_ID_EX),
 	// Input
 	.instr(instr_ID_EX),
 	.pc(pc_ID_EX),
@@ -99,7 +100,7 @@ ID instruction_decode(
 	.hlt_WB(hlt_WB)
 	);
 	
-	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM);
+	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM);//&(~j_ctrl_EX);
 	
 /************************ ID *************************************************/
 	
@@ -122,6 +123,7 @@ ID_EX_FF ID_EX(
 	.instr_EX(instr_EX),
 	.hlt_EX(hlt_EX_MEM_WB),
 	.pc_EX(pc_EX),
+	.j_ctrl_EX(j_ctrl_EX),
 	// Input
 	.p0_ID(p0_ID_EX),
 	.p1_ID(p1_ID_EX),
@@ -135,6 +137,7 @@ ID_EX_FF ID_EX(
 	.dst_addr_ID(dst_addr_ID_EX_MEM_WB),
 	.src1sel_ID(src1sel_ID_EX),
 	.pc_ID(pc_ID_EX),
+	.j_ctrl_ID(j_ctrl_ID_EX),
 	.instr_ID(instr_ID_EX),
 	.hlt_ID(hlt_ID_EX_MEM_WB),
 	.clk(clk),
@@ -155,7 +158,7 @@ wire [7:0] imm8_EX;
 wire [3:0] shamt_EX, dst_addr_EX_MEM_WB;
 wire [2:0] func_EX;
 wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
-wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, b_ctrl_EX;
+wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, b_ctrl_EX, j_ctrl_EX;
 wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
 
 localparam addzOp = 4'b0001;

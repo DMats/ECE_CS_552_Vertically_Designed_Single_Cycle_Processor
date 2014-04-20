@@ -1,4 +1,4 @@
-// Simple Test 1
+// Simple Test 2
 // Author: David Mateo
 // This test performs a set of commands meant to exersize the pipeline
 // without introducing any hazards.
@@ -6,15 +6,14 @@
 //llb R0, 0xFF 		// R0 has 0x0000
 llb R1, 0x11
 llb R2, 0x22
-hlt
 sub R2, R2, R2
 b eq, PASS
-
 
 CONTINUE:
 llb R3, 0x33
 llb R4, 0x44
 llb R5, 0x55
+
 llb R6, 0x66
 llb R7, 0x77
 llb R8, 0x88
@@ -28,7 +27,9 @@ llb R15, 0xFF
 hlt
 
 PASS:
+llb R15, 0x00
 add R1, R1, R1 			/// OHHHH SHITTTT.
-b neq, CONTINUE
+llb R2, 0x04
+//jr R2
 
 hlt
