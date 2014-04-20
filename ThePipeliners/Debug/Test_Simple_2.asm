@@ -4,7 +4,7 @@
 // without introducing any hazards.
 
 //llb R0, 0xFF 		// R0 has 0x0000
-llb R1, 0x11
+llb R1, 0x06
 llb R2, 0x22
 sub R2, R2, R2
 b eq, PASS
@@ -28,8 +28,8 @@ hlt
 
 PASS:
 llb R15, 0x00
-add R1, R1, R1 			/// OHHHH SHITTTT.
+add R2, R1, R1 			/// OHHHH SHITTTT.
 llb R2, 0x04
-//jr R2
+jr R1
 
 hlt

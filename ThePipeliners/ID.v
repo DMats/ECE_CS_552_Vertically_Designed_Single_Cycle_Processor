@@ -91,7 +91,7 @@ module ID(
 	// sending it through the EX stage and beyond.  This makes it so no
 	// flushes are necessary on jumps.		
 	assign j_ctrl = ((instr[15:12] == jalOp)||(instr[15:12] == jrOp));
-	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+instr[11:0]):
+	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+{{4{instr[11]}}, instr[11:0]}):
 					(instr[15:12] == jrOp) 	? p0:
 											  16'hxxxx;	
 
