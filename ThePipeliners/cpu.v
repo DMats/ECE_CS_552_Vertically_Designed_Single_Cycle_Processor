@@ -97,7 +97,13 @@ ID instruction_decode(
 	.dst_data_WB(wb_data_WB),
 	.dst_addr_WB(dst_addr_WB),
 	.we_WB(we_rf_WB),
-	.hlt_WB(hlt_WB)
+	.hlt_WB(hlt_WB),
+	.MEM_data(alu_result_MEM_WB),
+	.MEM_we(we_rf_MEM_WB),
+	.MEM_dst(dst_addr_MEM_WB),
+	.EX_data(alu_result_EX_MEM_WB),
+	.EX_we(we_rf_EX_MEM_WB_mux),
+	.EX_dst(dst_addr_EX_MEM_WB)
 	);
 	
 	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM)&(~j_ctrl_EX);

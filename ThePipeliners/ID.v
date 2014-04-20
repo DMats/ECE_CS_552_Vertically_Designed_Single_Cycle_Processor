@@ -25,13 +25,19 @@ module ID(
 	dst_data_WB, 
 	dst_addr_WB, 
 	we_WB,
-	hlt_WB
+	hlt_WB,
+	MEM_data,
+	MEM_we,
+	MEM_dst,
+	EX_data,
+	EX_we,
+	EX_dst
 	);
 	
 	// Inputs //
-	input [15:0] instr, pc, dst_data_WB;
-	input [3:0] dst_addr_WB;
-	input clk, rst_n, we_WB, hlt_WB;
+	input [15:0] instr, pc, dst_data_WB, MEM_data, EX_data;
+	input [3:0] dst_addr_WB, MEM_dst, EX_dst;
+	input clk, rst_n, we_WB, hlt_WB, MEM_we, EX_we;
 	
 	// Outputs //
  	output [15:0] p0, p1, j_pc;
@@ -42,9 +48,9 @@ module ID(
 	output re_mem, we_mem, wb_sel, j_ctrl, we_rf;
 	
 	// Local Wires //
-	wire [15:0] dst_data;
+	wire [15:0] dst_data, JR_REG;
 	wire [3:0] p0_addr, p1_addr, dst_addr;
-	wire re0, re1, we;
+	wire re0, re1, we, JR_EX_FORWARD, JR_MEM_FORWARD, JR_ID;
 	
 	// Relevant Opcodes
 	localparam jalOp = 4'b1101;
@@ -88,19 +94,36 @@ module ID(
 			
 	jump_controller j_controller(
 		//inputs
+		.MEM_dst(MEM_dst),
+		.MEM_we(MEM_we),
+		.EX_dst(EX_dst),
+		.EX_we(EX_we),
+		.JR(p0_addr),
+		//outputs
+		.JR_MEM_FORWARD(JR_MEM_FORWARD),
+		.JR_EX_FORWARD(JR_EX_FORWARD),
+		.JR_ID(JR_ID)
+		);
 		
+	
 
 	// The Jump logic below is necessary because as soon as we know 
 	// that we're jumping, we want to process it immediately without
 	// sending it through the EX stage and beyond.  This makes it so no
-	// flushes are necessary on jumps.		
+	// flushes are necessary on jumps.	
+	assign JR_REG = (JR_MEM_FORWARD)	?	MEM_data:
+					(JR_EX_FORWARD)		?	EX_data:
+					(JR_ID)				?	p0:
+											16'hxxxx;
+	
+	
 	assign j_ctrl = ((instr[15:12] == jalOp)||(instr[15:12] == jrOp));
-	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+JR_REG):
-					(instr[15:12] == jrOp) 	? p0:
+	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+{{4{instr[11]}}, instr[11:0]}):
+					(instr[15:12] == jrOp) 	? JR_REG:
 											  16'hxxxx;	
 
 	// Arguably, this statement could be in WB, but I decided to put it here.
-	assign dst_data = (instr[15:12] == jalOp)	?	(pc+1)	:	dst_data_WB;
+	assign dst_data = (instr[15:12] == jalOp)	?	(pc)	:	dst_data_WB;
 
 	// The following line is duplicated inside of instr_decode but I copied it here too.
 	// I didn't remove the other one because unsure if it's necessary, but it has

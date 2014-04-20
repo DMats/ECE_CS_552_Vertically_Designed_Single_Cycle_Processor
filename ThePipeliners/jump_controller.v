@@ -4,11 +4,12 @@ module jump_controller(
 	// Inputs
 	MEM_dst, EX_dst, JR, MEM_we, EX_we,
 	// Outputs
-	JR_MEM_FORWARD, JR_EX_FORWARD, JR_ID;
+	JR_MEM_FORWARD, JR_EX_FORWARD, JR_ID
 	);
 	
 	// inputs
 	input wire [3:0] MEM_dst, EX_dst, JR;
+	input wire MEM_we, EX_we;
 	
 	//outputs	
 	output wire JR_MEM_FORWARD, JR_EX_FORWARD, JR_ID;
