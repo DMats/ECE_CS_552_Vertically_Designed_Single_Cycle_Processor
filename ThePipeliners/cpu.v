@@ -100,7 +100,7 @@ ID instruction_decode(
 	.hlt_WB(hlt_WB)
 	);
 	
-	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM);//&(~j_ctrl_EX);
+	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM)&(~j_ctrl_EX);
 	
 /************************ ID *************************************************/
 	
