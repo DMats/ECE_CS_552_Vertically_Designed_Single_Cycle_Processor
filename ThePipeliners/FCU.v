@@ -20,7 +20,7 @@ module FCU(
 	input [3:0] ID_EX_RegisterRs;
 	input [3:0] ID_EX_RegisterRt;
 	input [3:0] MEM_WB_RegisterRd;
-	input [3:0] IC_EX_Opcode;
+	input [3:0] ID_EX_Opcode;
 
 	output [1:0] ForwardA, ForwardB;
 

@@ -1,6 +1,5 @@
 @0000 B111	// llb R1, 0x11
 @0001 B222	// llb R2, 0x22
-<<<<<<< HEAD
 @0002 B333	// llb R3, 0x33
 @0003 B444	// llb R4, 0x44
 @0004 B555	// llb R5, 0x55
@@ -17,25 +16,3 @@
 @000f B10F	// llb R1, 0x0f
 @0010 A1FF	// lhb R1, 0xff
 @0011 7114	// sra R1, R1, 4
-=======
-@0002 2222	// sub R2, R2, R2
-@0003 C20E	// b eq, PASS
-@0004 B333	// llb R3, 0x33
-@0005 B444	// llb R4, 0x44
-@0006 B555	// llb R5, 0x55
-@0007 B666	// llb R6, 0x66
-@0008 B777	// llb R7, 0x77
-@0009 B888	// llb R8, 0x88
-@000a B999	// llb R9, 0x99
-@000b BAAA	// llb R10, 0xAA
-@000c BBBB	// llb R11, 0xBB
-@000d BCCC	// llb R12, 0xCC
-@000e BDDD	// llb R13, 0xDD
-@000f BEEE	// llb R14, 0xEE
-@0010 BFFF	// llb R15, 0xFF
-@0011 F000	// hlt
-@0012 BF00	// llb R15, 0x00
-@0013 0111	// add R1, R1, R1
-@0014 B204	// llb R2, 0x04
-@0015 F000	// hlt
->>>>>>> 2c9579c686ab0b88d3dbfd7886e55ead4d612004

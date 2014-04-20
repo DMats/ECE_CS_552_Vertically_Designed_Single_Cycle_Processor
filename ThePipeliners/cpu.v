@@ -307,6 +307,7 @@ FCU forwarding_control_unit(
 	.EX_MEM_RegisterRd(dst_addr_MEM_WB), 
 	.ID_EX_RegisterRs(instr_EX[7:4]),
 	.ID_EX_RegisterRt(instr_EX[3:0]),
+	.ID_EX_Opcode(instr_EX[15:12]),
 	.MEM_WB_RegWrite(we_rf_WB),
 	.MEM_WB_RegisterRd(dst_addr_WB)
 	);
