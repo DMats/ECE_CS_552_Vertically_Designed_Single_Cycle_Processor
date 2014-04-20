@@ -54,10 +54,8 @@ module forwarding_logic(
 							(ID_EX_Opcode==srlOp)	||
 							(ID_EX_Opcode==sraOp)	||
 							(ID_EX_Opcode==lwOp));
-	// TODO: Implement a separate mux for a store word (probably still bugged.)
-	// TODO: Implement a separate mux for a jump reg (probably still bugged.)
 	assign jump_reg_source = (ID_EX_Opcode==jrOp);
-	assign store_source =   (ID_EX_Opcode==swOp);
+
 
 	// ForwardA controls the mux for src1
 	assign ForwardA = 	((two_sources||one_source)	&&
@@ -75,18 +73,38 @@ module forwarding_logic(
 																		2'b00;
 
 	// ForwardB controls the mux for src0
-	assign ForwardB =	((two_sources)								&&
+	assign ForwardB =	(((two_sources)								&&
 						(EX_MEM_RegWrite)							&&
 						(EX_MEM_RegisterRd != 4'h0)					&&
-						(EX_MEM_RegisterRd == ID_EX_RegisterRt))	?	2'b10:
-						((two_sources)								&&
+						(EX_MEM_RegisterRd == ID_EX_RegisterRt))	||
+						(jump_reg_source)							&&
+						(EX_MEM_RegWrite)							&&
+						(EX_MEM_RegisterRd != 4'h0)					&&
+						(EX_MEM_RegisterRd == ID_EX_RegisterRs))	?	2'b10:
+						(((two_sources)								&&
 						(MEM_WB_RegWrite)							&&
 						(MEM_WB_RegisterRd != 4'h0)					&&
-						(!((two_sources)							&&
-						EX_MEM_RegWrite								&&
+						(!(((two_sources)							&&
+						(EX_MEM_RegWrite)							&&
 						(EX_MEM_RegisterRd != 4'h0)					&&
-						(EX_MEM_RegisterRd != ID_EX_RegisterRt)))	&&
-						(MEM_WB_RegisterRd == ID_EX_RegisterRt))	?	2'b01:
+						(EX_MEM_RegisterRd == ID_EX_RegisterRt))	||
+						((jump_reg_source)							&&
+						(EX_MEM_RegWrite)							&&
+						(EX_MEM_RegisterRd != 4'h0)					&&
+						(EX_MEM_RegisterRd == ID_EX_RegisterRs))))	&&
+						(MEM_WB_RegisterRd == ID_EX_RegisterRt))	||
+						((jump_reg_source)							&&
+						(MEM_WB_RegWrite)							&&
+						(MEM_WB_RegisterRd != 4'h0)					&&
+						(!(((two_sources)							&&
+						(EX_MEM_RegWrite)							&&
+						(EX_MEM_RegisterRd != 4'h0)					&&
+						(EX_MEM_RegisterRd == ID_EX_RegisterRt))	||
+						((jump_reg_source)							&&
+						(EX_MEM_RegWrite)							&&
+						(EX_MEM_RegisterRd != 4'h0)					&&
+						(EX_MEM_RegisterRd == ID_EX_RegisterRs))))	&&
+						(MEM_WB_RegisterRd == ID_EX_RegisterRs)))	?	2'b01:
 																		2'b00;
 
 
