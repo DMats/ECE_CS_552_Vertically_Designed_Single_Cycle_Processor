@@ -9,6 +9,7 @@ module forwarding_logic(
 	EX_MEM_RegisterRd, 
 	ID_EX_RegisterRs,
 	ID_EX_RegisterRt,
+	ID_EX_Opcode,
 	MEM_WB_RegWrite,
 	MEM_WB_RegisterRd,
 	// Output
@@ -22,27 +23,67 @@ module forwarding_logic(
 	input [3:0] ID_EX_RegisterRt;
 	input [3:0] MEM_WB_RegisterRd;
 
+	input [3:0] ID_EX_Opcode;
+
 	output [1:0] ForwardA, ForwardB;
 
+	// Instruction Opcodes
+	localparam addOp = 4'b0000;
+	localparam addzOp = 4'b0001;
+	localparam subOp = 4'b0010;
+	localparam andOp = 4'b0011;
+	localparam norOp = 4'b0100;
+	localparam sllOp = 4'b0101;
+	localparam srlOp = 4'b0110;
+	localparam sraOp = 4'b0111;
+	localparam lwOp = 4'b1000;
+	localparam swOp = 4'b1001;
+	localparam lhbOp = 4'b1010;
+	localparam llbOp = 4'b1011;
+	localparam hltOp = 4'b1111;
+	localparam bOp = 4'b1100;
+	localparam jalOp = 4'b1101;
+	localparam jrOp = 4'b1110;
+
+	assign two_sources 	= 	((ID_EX_Opcode==addOp) 	||
+							(ID_EX_Opcode==addzOp)	||
+							(ID_EX_Opcode==subOp) 	||
+							(ID_EX_Opcode==andOp)	||
+							(ID_EX_Opcode==norOp));
+	assign one_source	= 	((ID_EX_Opcode==sllOp)	||
+							(ID_EX_Opcode==srlOp)	||
+							(ID_EX_Opcode==sraOp)	||
+							(ID_EX_Opcode==lwOp));
+	// TODO: Implement a separate mux for a store word (probably still bugged.)
+	// TODO: Implement a separate mux for a jump reg (probably still bugged.)
+	assign jump_reg_source = (ID_EX_Opcode==jrOp);
+	assign store_source =   (ID_EX_Opcode==swOp);
+
 	// ForwardA controls the mux for src1
-	assign ForwardA = 	((EX_MEM_RegWrite) 							&& 
+	assign ForwardA = 	((two_sources||one_source)	&&
+						(EX_MEM_RegWrite) 							&& 
 						(EX_MEM_RegisterRd != 4'h0) 				&& 
 						(EX_MEM_RegisterRd == ID_EX_RegisterRs)) 	? 	2'b10:
-						((MEM_WB_RegWrite)							&&
+						((two_sources||one_source||jump_reg_source)	&&
+						(MEM_WB_RegWrite)							&&
 						(MEM_WB_RegisterRd != 4'h0)					&&
-						(!(EX_MEM_RegWrite 							&&
+						(!((two_sources||one_source)				&&
+						EX_MEM_RegWrite 							&&
 						(EX_MEM_RegisterRd != 4'b0)					&&
 						(EX_MEM_RegisterRd != ID_EX_RegisterRs)))	&&
 						(MEM_WB_RegisterRd == ID_EX_RegisterRs))	?	2'b01:
 																		2'b00;
 
 	// ForwardB controls the mux for src0
-	assign ForwardB =	((EX_MEM_RegWrite)							&&
+	assign ForwardB =	((two_sources)								&&
+						(EX_MEM_RegWrite)							&&
 						(EX_MEM_RegisterRd != 4'h0)					&&
 						(EX_MEM_RegisterRd == ID_EX_RegisterRt))	?	2'b10:
-						((MEM_WB_RegWrite)							&&
+						((two_sources)								&&
+						(MEM_WB_RegWrite)							&&
 						(MEM_WB_RegisterRd != 4'h0)					&&
-						(!(EX_MEM_RegWrite							&&
+						(!((two_sources)							&&
+						EX_MEM_RegWrite								&&
 						(EX_MEM_RegisterRd != 4'h0)					&&
 						(EX_MEM_RegisterRd != ID_EX_RegisterRt)))	&&
 						(MEM_WB_RegisterRd == ID_EX_RegisterRt))	?	2'b01:
