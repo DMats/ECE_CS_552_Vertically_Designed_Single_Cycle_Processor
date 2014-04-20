@@ -57,7 +57,7 @@ module forwarding_logic(
 	assign jump_reg_source = (ID_EX_Opcode==jrOp);
 
 
-	// ForwardA controls the mux for src1
+	// ForwardA controls the mux for src1, p1, muxA, Rs
 	assign ForwardA = 	((two_sources||one_source)	&&
 						(EX_MEM_RegWrite) 							&& 
 						(EX_MEM_RegisterRd != 4'h0) 				&& 
@@ -72,7 +72,7 @@ module forwarding_logic(
 						(MEM_WB_RegisterRd == ID_EX_RegisterRs))	?	2'b01:
 																		2'b00;
 
-	// ForwardB controls the mux for src0
+	// ForwardB controls the mux for src0, p0, muxB, Rt
 	assign ForwardB =	(((two_sources)								&&
 						(EX_MEM_RegWrite)							&&
 						(EX_MEM_RegisterRd != 4'h0)					&&

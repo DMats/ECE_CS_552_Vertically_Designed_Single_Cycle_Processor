@@ -49,7 +49,7 @@ src_mux source_mux(
 	// Output
 	.src1(src1_lcl), 
 	// Input
-	.p1(muxB), 
+	.p1(muxA), 
 	.imm8(imm8), 
 	.src1sel(src1sel)
 	);
@@ -64,7 +64,7 @@ ALU arithmetic_logic_unit(
 	// Input
 	.ops(func),
 	.src1(src1_lcl),
-	.src0(muxA),
+	.src0(muxB),
 	.shamt(shamt),
 	.prev_br_ctrl(prev_br_ctrl),
 	.clk(clk),
