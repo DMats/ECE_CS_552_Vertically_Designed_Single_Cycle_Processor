@@ -9,7 +9,7 @@ module forwarding_logic(
 	EX_MEM_RegisterRd, 
 	ID_EX_RegisterRs,
 	ID_EX_RegisterRt,
-	ID_EX_Opcode,
+	//ID_EX_Opcode,
 	MEM_WB_RegWrite,
 	MEM_WB_RegisterRd,
 	// Output
@@ -27,6 +27,7 @@ module forwarding_logic(
 
 	output [1:0] ForwardA, ForwardB;
 
+	/*
 	// Instruction Opcodes
 	localparam addOp = 4'b0000;
 	localparam addzOp = 4'b0001;
@@ -105,7 +106,7 @@ module forwarding_logic(
 						(EX_MEM_RegisterRd != 4'h0)					&&
 						(EX_MEM_RegisterRd == ID_EX_RegisterRs))))	&&
 						(MEM_WB_RegisterRd == ID_EX_RegisterRs)))	?	2'b01:
-																		2'b00;
+																		2'b00;*/
 
 
 endmodule

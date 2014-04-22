@@ -5,6 +5,8 @@ module ID(
 	// Output //
 	p0, 
 	p1, 
+	p0_addr,
+	p1_addr,
 	shamt, 
 	func, 
 	src1sel, 
@@ -42,14 +44,13 @@ module ID(
 	// Outputs //
  	output [15:0] p0, p1, j_pc;
 	output [7:0] imm8;
-	output [3:0] shamt, dst_addr_new;
+	output [3:0] shamt, dst_addr_new, p0_addr, p1_addr;
 	output [2:0] func;
 	output hlt, src1sel;
 	output re_mem, we_mem, wb_sel, j_ctrl, we_rf;
 	
 	// Local Wires //
 	wire [15:0] dst_data, JR_REG;
-	wire [3:0] p0_addr, p1_addr, dst_addr;
 	wire re0, re1, we, JR_EX_FORWARD, JR_MEM_FORWARD, JR_ID;
 	
 	// Relevant Opcodes
@@ -75,6 +76,7 @@ module ID(
 							.we_mem(we_mem),
 							.wb_sel(wb_sel)
 						);
+
 						
 	rf regF(
 				// Output
