@@ -1,3 +1,12 @@
 cpu.o
 cpu_dump.vcd
 cpu_tb.v.bak
+ThePipeliners/EX.v.bak
+ThePipeliners/IF.v~
+ThePipeliners/a.out
+ThePipeliners/cpu.v.bak
+ThePipeliners/cpu.v~
+ThePipeliners/cpu_tb.v~
+ThePipeliners/instr_mem.v~
+ThePipeliners/rf_pipelines.v~
+ThePipeliners/transcript
