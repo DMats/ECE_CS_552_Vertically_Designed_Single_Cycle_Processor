@@ -4,6 +4,7 @@ cpu_tb.v.bak
 ThePipeliners/EX.v.bak
 ThePipeliners/IF.v~
 ThePipeliners/a.out
+ThePipeliners/cpu.o
 ThePipeliners/cpu.v.bak
 ThePipeliners/cpu.v~
 ThePipeliners/cpu_tb.v~
