@@ -1,3 +1,6 @@
+WARNING!!! UNTIL STATED OTHERWISE, THE TOP LEVEL OF THIS REPO IS OUT OF DATE.  THE CURRENT WORK BEING DONE IS IN "ThePipeliners" FOLDER.
+
+
 <h1>ECE_CS_552_Vertically_Designed_Single_Cycle_Processor</h1>
   
   This repository contains responses to the homeworks and project prompts for the Spring 2014 semester of ECE/CS 552        Introduction to Computer Architecture Class.  
