@@ -1,10 +1,10 @@
 module EX_MEM_FF(
 	// Output
 	we_mem_MEM, re_mem_MEM, alu_result_MEM, wb_sel_MEM, dst_addr_MEM,
-	we_rf_MEM, sdata_MEM, b_ctrl_MEM, hlt_MEM, p0_addr_MEM, p1_addr_MEM,
+	we_rf_MEM, sdata_MEM, b_ctrl_MEM, hlt_MEM,
 	// Input
 	we_mem_EX, re_mem_EX, alu_result_EX, wb_sel_EX, dst_addr_EX,
-	we_rf_EX, sdata_EX, b_ctrl_EX, hlt_EX, p0_addr_EX, p1_addr_EX,
+	we_rf_EX, sdata_EX, b_ctrl_EX, hlt_EX,
 	clk, rst_n, stall);
 	
 	// Inputs
