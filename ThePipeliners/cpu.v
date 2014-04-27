@@ -66,7 +66,7 @@ wire [15:0] instr_ID_EX;
 wire [15:0]pc_ID_EX, j_pc_ID;
 wire [15:0] p0_ID_EX, p1_ID_EX;
 wire [7:0] imm8_ID_EX;
-wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX_MEM_WB, p1_addr_ID_EX_MEM_WB;
+wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
 	we_rf_ID_EX_MEM_WB, j_ctrl_ID, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
@@ -77,8 +77,8 @@ ID instruction_decode(
 	// Output
 	.p0(p0_ID_EX),
 	.p1(p1_ID_EX),
-	.p0_addr(p0_addr_ID_EX_MEM_WB),
-	.p1_addr(p1_addr_ID_EX_MEM_WB),
+	.p0_addr(p0_addr_ID_EX),
+	.p1_addr(p1_addr_ID_EX),
 	.shamt(shamt_ID_EX),
 	.func(func_ID_EX),
 	.src1sel(src1sel_ID_EX),
@@ -119,8 +119,8 @@ ID_EX_FF ID_EX(
 	// Output
 	.p0_EX(p0_EX),
 	.p1_EX(p1_EX),
-	.p0_addr_EX(p0_addr_EX_MEM_WB),
-	.p1_addr_EX(p1_addr_EX_MEM_WB),
+	.p0_addr_EX(p0_addr_EX),
+	.p1_addr_EX(p1_addr_EX),
 	.shamt_EX(shamt_EX),
 	.func_EX(func_EX),
 	.imm8_EX(imm8_EX),
@@ -137,8 +137,8 @@ ID_EX_FF ID_EX(
 	// Input
 	.p0_ID(p0_ID_EX),
 	.p1_ID(p1_ID_EX),
-	.p0_addr_ID(p0_addr_ID_EX_MEM_WB),
-	.p1_addr_ID(p1_addr_ID_EX_MEM_WB),
+	.p0_addr_ID(p0_addr_ID_EX),
+	.p1_addr_ID(p1_addr_ID_EX),
 	.shamt_ID(shamt_ID_EX),
 	.func_ID(func_ID_EX),
 	.imm8_ID(imm8_ID_EX),
@@ -167,7 +167,7 @@ ID_EX_FF ID_EX(
 // EX stage wires
 wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, pc_EX, b_pc_EX, sdata_EX_MEM, alu_result_EX_MEM_WB;
 wire [7:0] imm8_EX;
-wire [3:0] shamt_EX, dst_addr_EX_MEM_WB, p0_addr_EX_MEM_WB, p1_addr_EX_MEM_WB;
+wire [3:0] shamt_EX, dst_addr_EX_MEM_WB, p0_addr_EX, p1_addr_EX;
 wire [2:0] func_EX;
 wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
 wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, b_ctrl_EX, j_ctrl_EX;
@@ -312,16 +312,15 @@ wire [1:0] forwardA, forwardB;
 
 FCU forwarding_control_unit(
 	// Output
-	.ForwardA(forwardA),
-	.ForwardB(forwardB),
+	.forwardA(forwardA),
+	.forwardB(forwardB),
 	// Input
-	.EX_MEM_RegWrite(we_rf_MEM_WB), 
-	.EX_MEM_RegisterRd(dst_addr_MEM_WB), 
-	.ID_EX_RegisterRs(p0_addr_EX_MEM_WB),
-	.ID_EX_RegisterRt(P1_addr_EX_MEM_WB),
-	.ID_EX_Opcode(instr_EX[15:12]),
-	.MEM_WB_RegWrite(we_rf_WB),
-	.MEM_WB_RegisterRd(dst_addr_WB)
+	.p0_addr_EX(p0_addr_EX),			
+	.p1_addr_EX(p1_addr_EX),			
+	.we_rf_MEM_WB(we_rf_MEM_WB), 		
+	.dst_addr_MEM_WB(dst_addr_MEM_WB), 	
+	.we_rf_WB(we_rf_WB),				
+	.dst_addr_WB(dst_addr_WB)			
 	);
 ///////////////////////////////////////////////////////////////////////////////
 

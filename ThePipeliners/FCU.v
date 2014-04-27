@@ -3,39 +3,36 @@
 // This module creates the forwarding control signals.
 module FCU(
 	// Input
-	EX_MEM_RegWrite, 
-	EX_MEM_RegisterRd, 
-	ID_EX_RegisterRs,
-	ID_EX_RegisterRt,
-	ID_EX_Opcode,
-	MEM_WB_RegWrite,
-	MEM_WB_RegisterRd,
+	p0_addr_EX,
+	p1_addr_EX,
+	we_rf_MEM_WB, 
+	dst_addr_MEM_WB, 
+	we_rf_WB,
+	dst_addr_WB,
 	// Output
-	ForwardA,
-	ForwardB
+	forwardA,
+	forwardB
 	);
 
-	input EX_MEM_RegWrite, MEM_WB_RegWrite;
-	input [3:0] EX_MEM_RegisterRd;
-	input [3:0] ID_EX_RegisterRs;
-	input [3:0] ID_EX_RegisterRt;
-	input [3:0] MEM_WB_RegisterRd;
-	input [3:0] ID_EX_Opcode;
+	input we_rf_MEM_WB, we_rf_WB;
+	input [3:0] dst_addr_MEM_WB;
+	input [3:0] p1_addr_EX;
+	input [3:0] p0_addr_EX;
+	input [3:0] dst_addr_WB;
 
-	output [1:0] ForwardA, ForwardB;
+	output [1:0] forwardA, forwardB;
 
 	forwarding_logic FL(
 		// Input
-		.EX_MEM_RegWrite(EX_MEM_RegWrite),
-		.EX_MEM_RegisterRd(EX_MEM_RegisterRd),
-		.ID_EX_RegisterRs(ID_EX_RegisterRs),
-		.ID_EX_RegisterRt(ID_EX_RegisterRt),
-		//.ID_EX_Opcode(ID_EX_Opcode),
-		.MEM_WB_RegWrite(MEM_WB_RegWrite),
-		.MEM_WB_RegisterRd(MEM_WB_RegisterRd),
+		.we_rf_MEM_WB(we_rf_MEM_WB),
+		.dst_addr_MEM_WB(dst_addr_MEM_WB),
+		.p1_addr_EX(p1_addr_EX),
+		.p0_addr_EX(p0_addr_EX),
+		.we_rf_WB(we_rf_WB),
+		.dst_addr_WB(dst_addr_WB),
 		// Output
-		.ForwardA(ForwardA),
-		.ForwardB(ForwardB)
+		.forwardA(forwardA),
+		.forwardB(forwardB)
 		);
 
 endmodule

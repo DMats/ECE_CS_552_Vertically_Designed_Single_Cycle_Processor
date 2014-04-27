@@ -23,8 +23,26 @@ llb R15, 0xFF
 
 // Only one of the following tests should ever be uncommented at a time.
 
-// EX_MEM_Rd == ID_EX_Rs Test
-add R1, R2, R3 		// R1 should get 0x0055
-add R4, R1, R2 		// R4 should get 0x0077
-////
+//// MEM destination == EX src0 Test
+//add R1, R2, R3 		// R1 should get 0x0055
+//add R4, R1, R2 		// R4 should get 0x0077
+
+//// MEM destination == EX src1 Test
+//add R1, R2, R5 		// R1 should get 0x0077
+//add R4, R2, R1 		// R4 should get 0x0099
+
+//// WB destination == EX src0 Test
+//add R1, R2, R3 		// R1 should get 0x0055
+//add R0, R0, R0 		// NOP
+//add R4, R1, R2 		// R4 should get 0x0077
+
+//// WB destination == EX src1 Test
+//add R1, R2, R5 		// R1 should get 0x0077
+//add R0, R0, R0    	// NOP
+//add R4, R1, R2 		// R4 should get 0x0099
+
+//// Dependency Cluster Fuck Test
+//add R1, R1, R1 		// R1 should get 0x0022
+//add R1, R1, R1 		// R1 should get 0x0044
+//add R1, R1, R1 		// R1 should get 0x0088
 

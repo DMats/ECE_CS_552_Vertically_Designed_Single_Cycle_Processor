@@ -22,22 +22,22 @@
 		SUB R0, R3, R12
 		B NEQ, FAIL
 		LW R4, R2, 0xF		# should be loading R4 with location 0x0083 (9560)
-		SUB R0, R4, R13
-		B NEQ, FAIL
+//		SUB R0, R4, R13
+//		B NEQ, FAIL
 #################
 #  ADDZ testing #
 #################	
-		ADDZ R5, R6, R10		# zero flag should last be set so R5 = 0x0056+0x0033
-		LLB R7, 0x89
-		LHB R7, 0x00
-		SUB R0, R7, R5
-		B NEQ, FAIL
-		ADD R0, R6, R6			# this add should clear zero flag
-		ADDZ R8, R10, R10		# would be performing 0x0056 + 0x0056, however R8 should stay 0x0002
-		LLB R9, 0x02
-		SUB R0, R8, R9
-		B NEQ, FAIL
-				
+//		ADDZ R5, R6, R10		# zero flag should last be set so R5 = 0x0056+0x0033
+//		LLB R7, 0x89
+//		LHB R7, 0x00
+//		SUB R0, R7, R5
+//		B NEQ, FAIL
+//		ADD R0, R6, R6			# this add should clear zero flag
+//		ADDZ R8, R10, R10		# would be performing 0x0056 + 0x0056, however R8 should stay 0x0002
+//		LLB R9, 0x02
+//		SUB R0, R8, R9
+//		B NEQ, FAIL
+//				
 PASS:	LLB R1, 0xAA		# R1 will contain 0xFFAA
 		LHB R1, 0xAA		# R1 will contain 0xAAAA (indicated pass)
 		HLT

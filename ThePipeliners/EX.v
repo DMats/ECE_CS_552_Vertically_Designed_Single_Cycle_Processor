@@ -42,14 +42,14 @@ input wire src1sel, prev_br_ctrl;
 input wire [1:0] forwardA, forwardB;
 
 wire [15:0] src1_lcl;
-wire [15:0] muxA, muxB;
+wire [15:0] src1_mux, src0_mux;
 
 // Instantiate src_mux
 src_mux source_mux(
 	// Output
 	.src1(src1_lcl), 
 	// Input
-	.p1(muxA), 
+	.p1(src1_mux), 
 	.imm8(imm8), 
 	.src1sel(src1sel)
 	);
@@ -64,7 +64,7 @@ ALU arithmetic_logic_unit(
 	// Input
 	.ops(func),
 	.src1(src1_lcl),
-	.src0(muxB),
+	.src0(src0_mux),
 	.shamt(shamt),
 	.prev_br_ctrl(prev_br_ctrl),
 	.clk(clk),
@@ -93,13 +93,13 @@ br_ctrl BC(
 assign sdata = p1;
 
 // Forwarding Muxes
-assign muxA = 	(forwardA == 2'b10) ? 	alu_result_MEM_WB	:
-				(forwardA == 2'b01) ? 	wb_data_WB 			:
-				/*forwardA == 2'b00*/	p0;
+assign src1_mux = 	(forwardA == 2'b10) ? 	alu_result_MEM_WB	:
+					(forwardA == 2'b01) ? 	wb_data_WB 			:
+					/*forwardA == 2'b00*/	p1;
 
-assign muxB = 	(forwardB == 2'b10) ?	alu_result_MEM_WB	:
-				(forwardB == 2'b01) ?	wb_data_WB 			:
-				/*forwardB == 2'b00*/	p1;
+assign src0_mux = 	(forwardB == 2'b10) ?	alu_result_MEM_WB	:
+					(forwardB == 2'b01) ?	wb_data_WB 			:
+					/*forwardB == 2'b00*/	p0;
 
 //TODO:  WHAT IF FORWARDA/B == 2'b11  WHAT THEN???  IDK.  
 // Figured it out.  2'b01 will only ever be set if 2'b10 is not set.

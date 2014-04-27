@@ -38,8 +38,8 @@ llb R15, 0xFF
 //add R0, R0, R0        // Set 0 flag
 //addz R1, R1, R1       // ADDZ Taken Test: R1 should get 0x0022
 
-//add R0, R0, R1		// UnSet 0 flag
-//addz R2, R2, R2       // ADDZ Not Taken Test: R2 should get 0x0022 and NOT 0x0044
+//add R0, R0, R1  		// UnSet 0 flag
+//addz R2, R2, R2 		// ADDZ Not Taken Test: R2 should get 0x0022 and NOT 0x0044
 
 //sll R1, R1, 4			// SLL Test: R1 should get 0x0110
 
