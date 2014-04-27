@@ -18,8 +18,6 @@ module br_pc_calc(instr, pc, br_pc);
 	assign opcode = instr[15:12];
 	assign br_offset = {{7{instr[8]}}, instr[8:0]};
 	
-
-
 	assign br_pc = (opcode==bOp) 	? pc + br_offset :
 									16'hxxxx;
 endmodule
