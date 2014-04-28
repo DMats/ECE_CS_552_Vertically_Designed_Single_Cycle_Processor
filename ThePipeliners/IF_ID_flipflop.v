@@ -13,9 +13,10 @@ module IF_ID_FF(
 	wire [15:0] next_instr, next_pc;
 	
 	always@(posedge clk, negedge rst_n)begin
-		if(~rst_n)begin
+		if (~rst_n) begin
 			instr_ID <= 16'h0000;
 			pc_ID <= 16'h0000;
+			$display("%g Reset Happened.  If a branch was taken or global reset, then this is correct.  If the branch was not taken, then this is a glitch!!!", $time);
 		end
 		else begin
 			instr_ID <= next_instr;

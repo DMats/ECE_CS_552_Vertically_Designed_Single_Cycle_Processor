@@ -1,6 +1,7 @@
 // R Scott Carson
 // 16 bit ALU
-module ALU(ops, src1, src0, shamt, prev_br_ctrl, clk, rst_n, dst, N, Z, V);
+module ALU(opcode, ops, src1, src0, shamt, prev_br_ctrl, clk, rst_n, dst, N, Z, V);
+	input[3:0] opcode;
 	input[2:0] ops;
 	input[15:0] src1, src0;
 	input[3:0] shamt;
@@ -13,7 +14,25 @@ module ALU(ops, src1, src0, shamt, prev_br_ctrl, clk, rst_n, dst, N, Z, V);
 	wire [16:0] temp_dst, arithmetic_temp, saturated_arithmetic;
 	wire ov_pos, ov_neg, exception, n, zr, ov;
 	
-	//opcodes
+	// Instruction Opcodes
+	localparam addOp = 4'b0000;
+	localparam addzOp = 4'b0001;
+	localparam subOp = 4'b0010;
+	localparam andOp = 4'b0011;
+	localparam norOp = 4'b0100;
+	localparam sllOp = 4'b0101;
+	localparam srlOp = 4'b0110;
+	localparam sraOp = 4'b0111;
+	localparam lwOp = 4'b1000;
+	localparam swOp = 4'b1001;
+	localparam lhbOp = 4'b1010;
+	localparam llbOp = 4'b1011;
+	localparam hltOp = 4'b1111;
+	localparam bOp = 4'b1100;
+	localparam jalOp = 4'b1101;
+	localparam jrOp = 4'b1110;
+
+	// ALU Operations
 	localparam add16 = 3'b000;
 	localparam sub16 = 3'b001;
 	localparam and16 = 3'b010;
@@ -46,6 +65,16 @@ module ALU(ops, src1, src0, shamt, prev_br_ctrl, clk, rst_n, dst, N, Z, V);
 								(ops==lhb16)	?	{1'b0,{src1[7:0],src0[7:0]}}:
 													17'hxxxxx;
 
+	assign update_NZV = 	((opcode == addOp)	||
+							(opcode == addzOp) 	||
+							(opcode == subOp));
+	
+	assign update_Z_only = 	((opcode == andOp)	||
+							(opcode == norOp)	||
+							(opcode == sllOp)	||
+							(opcode == srlOp)	||
+							(opcode == sraOp));
+
 	// Combinational Logic for Flags //								
 	// Check if result is negative
 	assign n = ((ops==add16) || (ops==sub16)) ? dst[15] :  N;
@@ -61,15 +90,25 @@ module ALU(ops, src1, src0, shamt, prev_br_ctrl, clk, rst_n, dst, N, Z, V);
 			Z <= 1'b0;
 			V <= 1'b0;
 		end
-		else if (prev_br_ctrl && rst_n) begin
+		else if (prev_br_ctrl) begin
 			N <= N;
 			Z <= Z;
 			V <= V;
 		end
-		else begin
+		else if (update_Z_only) begin
+			N <= N;
+			Z <= zr;
+			V <= V;
+		end
+		else if (update_NZV) begin
 			N <= n;
 			Z <= zr;
 			V <= ov;
+		end
+		else begin
+			N <= N;
+			Z <= Z;
+			V <= V;
 		end
 	end	
 

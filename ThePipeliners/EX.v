@@ -68,7 +68,8 @@ ALU arithmetic_logic_unit(
 	.shamt(shamt),
 	.prev_br_ctrl(prev_br_ctrl),
 	.clk(clk),
-	.rst_n(rst_n)
+	.rst_n(rst_n),
+	.opcode(instr[15:12])
 	);
 
 br_pc_calc BPC(
@@ -90,7 +91,7 @@ br_ctrl BC(
 	.br_ctrl(br_ctrl)
 	);
 
-assign sdata = p1;
+assign sdata = src1_mux;
 
 // Forwarding Muxes
 assign src1_mux = 	(forwardA == 2'b10) ? 	alu_result_MEM_WB	:

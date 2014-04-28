@@ -46,3 +46,16 @@ llb R15, 0xFF
 //add R1, R1, R1 		// R1 should get 0x0044
 //add R1, R1, R1 		// R1 should get 0x0088
 
+
+//// GOD DAMN BRANCHING BUG Where the instruction after a Non Taken branch
+//// becomes a 0000
+sub R0, R1, R1 			// Set the zero flag
+b neq, FAIL 				
+
+PASS:  	llb R1, 0xAA     	// R1 should get 0x00AA
+		lhb R1, 0xAA 		// R1 should get 0xAAAA
+		hlt
+
+FAIL:	llb R1, 0xFF 		// R1 should get 0xFFFF
+		hlt
+

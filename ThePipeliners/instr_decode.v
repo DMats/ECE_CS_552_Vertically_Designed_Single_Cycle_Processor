@@ -107,10 +107,10 @@ module I_DECODE(
 																3'bxxx;
 	
 	// Determine if the result will be written back to the register file.
-	assign we_rf = 			(opcode == bOp)				?	1'b0:
+	assign we_rf = 	(opcode == bOp)				?	1'b0:
 					(opcode == jrOp)			?	1'b0:
 					(opcode == swOp)			?	1'b0:
-											1'b1;
+													1'b1;
 												
 	assign re0 = 	(opcode == llbOp)	?	1'b0:
 											1'b1;

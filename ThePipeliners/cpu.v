@@ -4,6 +4,10 @@ input clk, rst_n;
 output hlt;
 output [15:0] pc;
 
+// Assign top level outputs!
+assign pc = pc_IF_ID_EX;
+assign hlt = hlt_WB;
+
 /************************ IF *************************************************/
 
 // IF stage wires
@@ -23,16 +27,14 @@ IF instruction_fetch(
 	.rst_n(rst_n),
 	.hlt(hlt_ID_EX_MEM_WB),
 	.alt_pc_ctrl(alt_pc_ctrl_IF),
-	.alt_pc(alt_pc_IF)
+	.alt_pc(alt_pc_IF),
+	.stall(stall_PC)
 	);
 	
 	assign alt_pc_ctrl_IF = (j_ctrl_ID_EX | b_ctrl_EX_MEM);
 	assign alt_pc_IF = 	(j_ctrl_ID_EX) ? j_pc_ID:
 						(b_ctrl_EX_MEM) ? b_pc_EX:
 										16'hxxxx;
-
-	assign pc = pc_IF_ID_EX;
-	assign hlt = hlt_WB;
 	
 /************************ IF *************************************************/
 	
@@ -325,10 +327,11 @@ FCU forwarding_control_unit(
 ///////////////////////////////////////////////////////////////////////////////
 
 // HDU ////////////////////////////////////////////////////////////////////////
-wire stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB;
+wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB;
 
 HDU hazard_detection_unit(
 	// Output
+	.stall_PC(stall_PC),
 	.stall_IF_ID(stall_IF_ID),
 	.stall_ID_EX(stall_ID_EX),
 	.stall_EX_MEM(stall_EX_MEM),
@@ -336,7 +339,7 @@ HDU hazard_detection_unit(
 	// Input
 	.clk(clk), 
 	.rst_n(rst_n), 
-	.instr(instr_ID_EX) 
+	.instr(instr_IF_ID_EX) 
 	);
 ///////////////////////////////////////////////////////////////////////////////
 
