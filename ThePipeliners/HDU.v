@@ -22,8 +22,8 @@ module HDU(clk, rst_n, instr, stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, 
 		
 		assign stall_PC = stall_lcl;
 		assign stall_IF_ID = stall_lcl;
-		assign stall_ID_EX = stall_lcl;
-		assign stall_EX_MEM = stall_lcl;
+		assign stall_ID_EX = 1'b0;
+		assign stall_EX_MEM = 1'b0;
 		assign stall_MEM_WB = 1'b0;
 	
 endmodule

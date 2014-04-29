@@ -14,7 +14,7 @@ assign hlt = hlt_WB;
 wire [15:0] instr_IF_ID_EX;
 wire [15:0] pc_IF_ID_EX, alt_pc_IF;
 wire alt_pc_ctrl_IF;
-wire rst_n_IF_ID, stall_or_hlt_IF_ID;
+wire flush_IF_ID, stall_or_hlt_IF_ID;
 
 
 // Instantiate IF
@@ -50,11 +50,12 @@ IF_ID_FF IF_ID(
 	.instr_IF(instr_IF_ID_EX),
 	.pc_IF(pc_IF_ID_EX),
 	.clk(clk),
-	.rst_n(rst_n_IF_ID),
-	.stall(stall_or_hlt_IF_ID)
+	.rst_n(rst_n),
+	.stall(stall_or_hlt_IF_ID),
+	.flush(flush_IF_ID)
 	);
 	
-	assign rst_n_IF_ID = (~b_ctrl_EX_MEM & rst_n) ? 1'b1 : 1'b0;
+	assign flush_IF_ID = (b_ctrl_EX_MEM) ? 1'b1 : 1'b0;
 	assign stall_or_hlt_IF_ID = stall_IF_ID | hlt_EX_MEM_WB;
 ///////////////////////////////////////////////////////////////////////////////
 
