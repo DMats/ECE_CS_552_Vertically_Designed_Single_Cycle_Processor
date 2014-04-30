@@ -1,10 +1,10 @@
 // program_counter
 // Authors:  David Mateo, R. Scott Carson
-module PC(iaddr, pc_plus_1, alt_pc, alt_pc_ctrl, clk, rst_n, hlt, stall);
+module PC(iaddr, pc, alt_pc, alt_pc_ctrl, clk, rst_n, hlt, stall);
 
 output reg [15:0] iaddr;
 
-output wire [15:0] pc_plus_1;
+output wire [15:0] pc;
 
 input wire [15:0] alt_pc;
 input wire clk, rst_n, hlt, alt_pc_ctrl, stall;
@@ -27,8 +27,8 @@ end
 ///////////////////////////////////////////////
 assign next_iaddr = (hlt || stall)	? 	iaddr : 
 					(alt_pc_ctrl)	?	alt_pc:
-									pc_plus_1;
-assign pc_plus_1 = iaddr + 16'h0001;
+										pc + 1;
+assign pc = iaddr;
 //////////////////////////////////////////////
 
 /*

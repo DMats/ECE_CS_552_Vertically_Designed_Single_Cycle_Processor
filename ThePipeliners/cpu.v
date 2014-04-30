@@ -5,7 +5,7 @@ output hlt;
 output [15:0] pc;
 
 // Assign top level outputs!
-assign pc = pc_IF_ID_EX;
+assign pc = pc_IF_ID_EX + 1;
 assign hlt = hlt_WB;
 
 /************************ IF *************************************************/
@@ -21,7 +21,7 @@ wire flush_IF_ID, stall_or_hlt_IF_ID;
 IF instruction_fetch(	
 	// Output
 	.instr(instr_IF_ID_EX),
-	.pc_plus_1(pc_IF_ID_EX),
+	.pc(pc_IF_ID_EX),
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
@@ -66,14 +66,14 @@ IF_ID_FF IF_ID(
 
 // ID stage wires
 wire [15:0] instr_ID_EX;
-wire [15:0]pc_ID_EX, j_pc_ID;
+wire [15:0] pc_ID_EX, j_pc_ID;
 wire [15:0] p0_ID_EX, p1_ID_EX;
 wire [7:0] imm8_ID_EX;
 wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
-	we_rf_ID_EX_MEM_WB, j_ctrl_ID, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
-	hlt_ID_EX_MEM_WB_CTRL, j_ctrl_ID_EX;
+	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
+	hlt_ID_EX_MEM_WB_CTRL;
 
 // Instantiate ID
 ID instruction_decode(	
