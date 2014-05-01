@@ -1,0 +1,11 @@
+another_sample.asm, pass, 5, 1
+BasicOpCodes2.txt, pass, 37, 31
+BasicOpCodes4.txt, pass, 19, 10
+NOP_test.txt, fail
+Prog0.asm, fail
+prog1.txt, fail
+prog5.txt, pass, 512, 256
+sample.txt, pass, 5, 1
+Test_Basic.asm, pass, 19, 15
+Test_Forward.asm, pass, 23, 19
+Test_Simple_2.asm, pass, 28, 21
