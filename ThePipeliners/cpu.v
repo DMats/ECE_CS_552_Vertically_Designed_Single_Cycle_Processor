@@ -5,14 +5,14 @@ output hlt;
 output [15:0] pc;
 
 // Assign top level outputs!
-assign pc = pc_IF_ID_EX + 1;
+assign pc = pc_IF_ID_EX_MEM_WB;
 assign hlt = hlt_WB;
 
 /************************ IF *************************************************/
 
 // IF stage wires
 wire [15:0] instr_IF_ID_EX;
-wire [15:0] pc_IF_ID_EX, alt_pc_IF;
+wire [15:0] pc_IF_ID_EX_MEM_WB, alt_pc_IF;
 wire alt_pc_ctrl_IF;
 wire flush_IF_ID, stall_or_hlt_IF_ID;
 
@@ -21,7 +21,7 @@ wire flush_IF_ID, stall_or_hlt_IF_ID;
 IF instruction_fetch(	
 	// Output
 	.instr(instr_IF_ID_EX),
-	.pc(pc_IF_ID_EX),
+	.pc_plus_1(pc_IF_ID_EX_MEM_WB),
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
@@ -31,10 +31,10 @@ IF instruction_fetch(
 	.stall(stall_PC)
 	);
 	
-	assign alt_pc_ctrl_IF = (j_ctrl_ID_EX | b_ctrl_EX_MEM);
-	assign alt_pc_IF = 	(j_ctrl_ID_EX) ? j_pc_ID:
-						(b_ctrl_EX_MEM) ? b_pc_EX:
-										16'hxxxx;
+	assign alt_pc_ctrl_IF = (j_ctrl_ID_EX_MEM_WB | b_ctrl_EX_MEM);
+	assign alt_pc_IF = 	(j_ctrl_ID_EX_MEM_WB) 	? 	j_pc_ID	:
+						(b_ctrl_EX_MEM) 		? 	b_pc_EX	:
+													16'hxxxx;
 	
 /************************ IF *************************************************/
 	
@@ -45,17 +45,17 @@ IF instruction_fetch(
 IF_ID_FF IF_ID(
 	// Output
 	.instr_ID(instr_ID_EX),
-	.pc_ID(pc_ID_EX),
+	.pc_ID(pc_ID_EX_MEM_WB),
 	// Inputs
 	.instr_IF(instr_IF_ID_EX),
-	.pc_IF(pc_IF_ID_EX),
+	.pc_IF(pc_IF_ID_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
 	.stall(stall_or_hlt_IF_ID),
 	.flush(flush_IF_ID)
 	);
 	
-	assign flush_IF_ID = (b_ctrl_EX_MEM) ? 1'b1 : 1'b0;
+	assign flush_IF_ID = (b_ctrl_EX_MEM | j_ctrl_ID_EX_MEM_WB) ? 1'b1 : 1'b0;
 	assign stall_or_hlt_IF_ID = stall_IF_ID | hlt_EX_MEM_WB;
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -66,13 +66,13 @@ IF_ID_FF IF_ID(
 
 // ID stage wires
 wire [15:0] instr_ID_EX;
-wire [15:0] pc_ID_EX, j_pc_ID;
+wire [15:0] pc_ID_EX_MEM_WB, j_pc_ID;
 wire [15:0] p0_ID_EX, p1_ID_EX;
 wire [7:0] imm8_ID_EX;
 wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
-	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
+	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX_MEM_WB, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
 	hlt_ID_EX_MEM_WB_CTRL;
 
 // Instantiate ID
@@ -93,10 +93,10 @@ ID instruction_decode(
 	.wb_sel(wb_sel_ID_EX_MEM_WB),
 	.dst_addr_new(dst_addr_ID_EX_MEM_WB),
 	.j_pc(j_pc_ID),
-	.j_ctrl(j_ctrl_ID_EX),
+	.j_ctrl(j_ctrl_ID_EX_MEM_WB),
 	// Input
 	.instr(instr_ID_EX),
-	.pc(pc_ID_EX),
+	.pc(pc_ID_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
 	.dst_data_WB(wb_data_WB),
@@ -111,7 +111,7 @@ ID instruction_decode(
 	.EX_dst(dst_addr_EX_MEM_WB)
 	);
 	
-	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM)&(~j_ctrl_EX);
+	assign hlt_ID_EX_MEM_WB = hlt_ID_EX_MEM_WB_CTRL&(~b_ctrl_EX_MEM)&(~j_ctrl_EX_MEM_WB);
 	
 /************************ ID *************************************************/
 	
@@ -135,8 +135,8 @@ ID_EX_FF ID_EX(
 	.src1sel_EX(src1sel_EX),
 	.instr_EX(instr_EX),
 	.hlt_EX(hlt_EX_MEM_WB),
-	.pc_EX(pc_EX),
-	.j_ctrl_EX(j_ctrl_EX),
+	.pc_EX(pc_EX_MEM_WB),
+	.j_ctrl_EX(j_ctrl_EX_MEM_WB),
 	// Input
 	.p0_ID(p0_ID_EX),
 	.p1_ID(p1_ID_EX),
@@ -151,8 +151,8 @@ ID_EX_FF ID_EX(
 	.wb_sel_ID(wb_sel_ID_EX_MEM_WB),
 	.dst_addr_ID(dst_addr_ID_EX_MEM_WB),
 	.src1sel_ID(src1sel_ID_EX),
-	.pc_ID(pc_ID_EX),
-	.j_ctrl_ID(j_ctrl_ID_EX),
+	.pc_ID(pc_ID_EX_MEM_WB),
+	.j_ctrl_ID(j_ctrl_ID_EX_MEM_WB),
 	.instr_ID(instr_ID_EX),
 	.hlt_ID(hlt_ID_EX_MEM_WB),
 	.clk(clk),
@@ -168,12 +168,13 @@ ID_EX_FF ID_EX(
 /************************ EX *************************************************/
 
 // EX stage wires
-wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, pc_EX, b_pc_EX, sdata_EX_MEM, alu_result_EX_MEM_WB;
+wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, b_pc_EX, sdata_EX_MEM, 
+	alu_result_EX_MEM_WB, pc_EX_MEM_WB;
 wire [7:0] imm8_EX;
 wire [3:0] shamt_EX, dst_addr_EX_MEM_WB, p0_addr_EX, p1_addr_EX;
 wire [2:0] func_EX;
 wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
-wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, b_ctrl_EX, j_ctrl_EX;
+wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, j_ctrl_EX_MEM_WB;
 wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
 
 localparam addzOp = 4'b0001;
@@ -191,7 +192,7 @@ EX execution(
 	// Input
 	.clk(clk),
 	.rst_n(rst_n),
-	.pc(pc_EX),
+	.pc(pc_EX_MEM_WB),
 	.func(func_EX),
 	.shamt(shamt_EX),
 	.src1sel(src1sel_EX),
@@ -202,6 +203,7 @@ EX execution(
 	.alu_result_MEM_WB(alu_result_MEM_WB),
 	.wb_data_WB(wb_data_WB),
 	.prev_br_ctrl(b_ctrl_MEM),
+	.prev_j_ctrl(j_ctrl_MEM_WB),
 	.forwardA(forwardA),
 	.forwardB(forwardB)
 	);
@@ -223,6 +225,8 @@ EX_MEM_FF EX_MEM(
 	.wb_sel_MEM(wb_sel_MEM_WB),
 	.dst_addr_MEM(dst_addr_MEM_WB),
 	.b_ctrl_MEM(b_ctrl_MEM),
+	.pc_MEM(pc_MEM_WB),
+	.j_ctrl_MEM(j_ctrl_MEM_WB),
 	.hlt_MEM(hlt_MEM_WB),
 	//Inputs
 	.sdata_EX(sdata_EX_MEM),
@@ -233,6 +237,8 @@ EX_MEM_FF EX_MEM(
 	.wb_sel_EX(wb_sel_EX_MEM_WB),
 	.dst_addr_EX(dst_addr_EX_MEM_WB),
 	.b_ctrl_EX(b_ctrl_EX_MEM),
+	.pc_EX(pc_EX_MEM_WB),
+	.j_ctrl_EX(j_ctrl_EX_MEM_WB),
 	.hlt_EX(hlt_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
@@ -247,8 +253,8 @@ EX_MEM_FF EX_MEM(
 /************************ MEM *************************************************/
 
 // MEM stage wires
-wire wb_sel_MEM_WB, we_rf_MEM_WB, we_mem_MEM, re_mem_MEM, b_ctrl_MEM, stall_or_hlt_MEM_WB, hlt_MEM_WB;
-wire [15:0] alu_result_MEM_WB, sdata_MEM, ldata_MEM_WB, addr_mem_MEM;
+wire wb_sel_MEM_WB, we_rf_MEM_WB, we_mem_MEM, re_mem_MEM, b_ctrl_MEM, j_ctrl_MEM_WB, stall_or_hlt_MEM_WB, hlt_MEM_WB;
+wire [15:0] alu_result_MEM_WB, sdata_MEM, ldata_MEM_WB, addr_mem_MEM, pc_MEM_WB;
 wire [3:0] dst_addr_MEM_WB;
 
 MEM memory(
@@ -276,6 +282,8 @@ MEM_WB_FF MEM_WB(
 	.we_rf_WB(we_rf_WB),
 	.wb_sel_WB(wb_sel_WB),
 	.dst_addr_WB(dst_addr_WB),
+	.pc_WB(pc_WB),
+	.j_ctrl_WB(j_ctrl_WB),
 	.hlt_WB(hlt_WB),
 	// Inputs
 	.ldata_MEM(ldata_MEM_WB),
@@ -283,6 +291,8 @@ MEM_WB_FF MEM_WB(
 	.we_rf_MEM(we_rf_MEM_WB),
 	.wb_sel_MEM(wb_sel_MEM_WB),
 	.dst_addr_MEM(dst_addr_MEM_WB),
+	.pc_MEM(pc_MEM_WB),
+	.j_ctrl_MEM(j_ctrl_MEM_WB),
 	.hlt_MEM(hlt_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
@@ -295,7 +305,7 @@ MEM_WB_FF MEM_WB(
 
 
 /************************ WB *************************************************/
-wire [15:0] wb_data_WB, alu_result_WB, ldata_WB;
+wire [15:0] wb_data_WB, alu_result_WB, ldata_WB, pc_WB;
 wire we_rf_WB, wb_sel_WB, hlt_WB;
 wire [3:0] dst_addr_WB;
 
@@ -305,7 +315,9 @@ WB write_back(
 	// Input
 	.wb_sel(wb_sel_WB),
 	.rd_data(ldata_WB),
-	.alu_result(alu_result_WB)
+	.alu_result(alu_result_WB),
+	.pc(pc_WB),
+	.j_ctrl(j_ctrl_WB)
 	);
 	
 /************************ WB *************************************************/

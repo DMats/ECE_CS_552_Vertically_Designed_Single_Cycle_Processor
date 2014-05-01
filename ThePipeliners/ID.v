@@ -59,7 +59,6 @@ module ID(
 	
 	I_DECODE inst_decoder(	//Inputs
 							.instr(instr),
-							.PC(pc),
 							// Outputs
 							.p0_addr(p0_addr),
 							.re0(re0),

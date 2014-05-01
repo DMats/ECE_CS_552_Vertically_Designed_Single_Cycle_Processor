@@ -1,9 +1,9 @@
 // Author:  David Mateo
 // Instruction Fetch
 // This module contains all modules used for Instruction Fetch 
-module IF(instr, pc, alt_pc, alt_pc_ctrl, clk, rst_n, hlt, stall);
+module IF(instr, pc_plus_1, alt_pc, alt_pc_ctrl, clk, rst_n, hlt, stall);
 
-output wire [15:0] instr, pc;
+output wire [15:0] instr, pc_plus_1;
 
 input wire[15:0] alt_pc;
 input wire clk, rst_n, hlt, alt_pc_ctrl, stall;
@@ -23,7 +23,7 @@ IM instr_mem(
 PC program_counter(
 	// Output
 	.iaddr(iaddr),
-	.pc(pc),
+	.pc_plus_1(pc_plus_1),
 	// Input
 	.alt_pc(alt_pc),
 	.alt_pc_ctrl(alt_pc_ctrl),

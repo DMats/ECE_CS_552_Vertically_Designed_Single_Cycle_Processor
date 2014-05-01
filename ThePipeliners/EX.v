@@ -25,7 +25,8 @@ module EX(
 	forwardB,
 	alu_result_MEM_WB,
 	wb_data_WB,
-	prev_br_ctrl
+	prev_br_ctrl,
+	prev_j_ctrl
 	);
 
 output wire [15:0] dst, sdata;
@@ -38,7 +39,7 @@ input wire [15:0] p0, p1, instr, pc, alu_result_MEM_WB, wb_data_WB;
 input wire [7:0] imm8;
 input wire [3:0] shamt;
 input wire [2:0] func;
-input wire src1sel, prev_br_ctrl;
+input wire src1sel, prev_br_ctrl, prev_j_ctrl;
 input wire [1:0] forwardA, forwardB;
 
 wire [15:0] src1_lcl;
@@ -67,6 +68,7 @@ ALU arithmetic_logic_unit(
 	.src0(src0_mux),
 	.shamt(shamt),
 	.prev_br_ctrl(prev_br_ctrl),
+	.prev_j_ctrl(prev_j_ctrl),
 	.clk(clk),
 	.rst_n(rst_n),
 	.opcode(instr[15:12])

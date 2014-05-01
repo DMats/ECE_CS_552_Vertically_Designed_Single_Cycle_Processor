@@ -5,7 +5,6 @@
 module I_DECODE(
 	//Inputs
 	instr, 
-	PC, 
 	//Outputs
 	p0_addr, 
 	re0, 
@@ -23,7 +22,7 @@ module I_DECODE(
 	wb_sel);
 
 	// Inputs
-	input[15:0] instr, PC;
+	input[15:0] instr;
 
 	// Outputs
 	output [3:0] p0_addr, p1_addr, dst_addr, shamt;
