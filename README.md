@@ -1,9 +1,8 @@
 WARNING!!! UNTIL STATED OTHERWISE, THE TOP LEVEL OF THIS REPO IS OUT OF DATE.  THE CURRENT WORK BEING DONE IS IN "ThePipeliners" FOLDER.
 
 
-<h1>ECE/CS 552</h1><br>
-<h1>Vertically Designed Pipelined Processor</h1>
-  
+<h1>ECE/CS 552 Vertically Designed Pipelined Processor</h1>
+
   This repository contains responses to the homeworks and project prompts for the Spring 2014 semester of ECE/CS 552        Introduction to Computer Architecture Class.  
   
 <h1>Contributors</h1>
