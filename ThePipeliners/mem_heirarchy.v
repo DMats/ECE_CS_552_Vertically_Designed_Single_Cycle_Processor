@@ -11,7 +11,11 @@ module mem_heirarchy(
 	
 	// Outputs
 	output wire [15:0] instr, rd_data;
-	output wire i_rdy, d_rdy;
+	output wire i_rdy, d_rdy, stall;
+	
+	wire [63:0] i_wr_data, u_wr_data, u_rd_data;
+	wire [13:0] u_addr;
+	wire u_rdy, u_re, i_we, u_we;
 	
 	cach_controller CC(
 		// Inputs
@@ -45,12 +49,14 @@ module mem_heirarchy(
 		.rst_n(rst_n),
 		.re(u_re),
 		.we(u_we),
-		.addr(u_addr[15:2]),
-		.wdata(u_data),
+		.addr(u_addr),
+		.wdata(u_wr_data),
 		//Outputs
 		.rd_data(u_rd_data),
 		.u_rdy(u_rdy)
 		);
+		
+		assign u_addr = i_addr[15:2];
 		
 		
 endmodule
