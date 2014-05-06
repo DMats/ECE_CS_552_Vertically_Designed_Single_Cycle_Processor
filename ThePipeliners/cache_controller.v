@@ -1,6 +1,6 @@
 module cache_controller(
 	// Inputs
-	clk, rst_n, i_rdy, u_rdy,
+	clk, rst_n, i_rdy, d_rdy, u_rdy, data_re,
 	// Outputs
 	u_re, i_we//, stall
 	);

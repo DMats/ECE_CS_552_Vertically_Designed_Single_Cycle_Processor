@@ -5,7 +5,7 @@ output hlt;
 output [15:0] pc;
 
 // Assign top level outputs!
-assign pc = pc_IF_ID_EX_MEM_WB;
+assign pc = pc_IF;
 assign hlt = hlt_WB;
 
 /************************ IF *************************************************/
