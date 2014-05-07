@@ -341,7 +341,7 @@ FCU forwarding_control_unit(
 ///////////////////////////////////////////////////////////////////////////////
 
 // HDU ////////////////////////////////////////////////////////////////////////
-wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB;
+wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB, d_access_stall;
 
 HDU hazard_detection_unit(
 	// Output
@@ -354,8 +354,11 @@ HDU hazard_detection_unit(
 	.clk(clk), 
 	.rst_n(rst_n), 
 	.instr(instr_IF_ID_EX),
-	.i_rdy(i_rdy_CC)
+	.i_rdy(i_rdy_CC),
+	.d_rdy(d_access_stall)
 	);
+	
+	assign d_access_stall = (d_rdy_CC) | (~re_mem_MEM & ~we_mem_MEM);
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -373,8 +376,8 @@ mem_heirarchy MH(
 	.rst_n(rst_n),
 	.i_addr(pc_IF),
 	.d_addr(addr_mem_MEM),
-	.d_re(re_mem_MEM),
-	.d_we(we_mem_MEM),
+	.extern_d_re(re_mem_MEM),
+	.extern_d_we(we_mem_MEM),
 	.wrt_data(sdata_MEM)
 	);
 	
