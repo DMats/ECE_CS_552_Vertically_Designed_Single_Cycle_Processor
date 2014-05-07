@@ -336,7 +336,8 @@ FCU forwarding_control_unit(
 	.we_rf_MEM_WB(we_rf_MEM_WB), 		
 	.dst_addr_MEM_WB(dst_addr_MEM_WB), 	
 	.we_rf_WB(we_rf_WB),				
-	.dst_addr_WB(dst_addr_WB)			
+	.dst_addr_WB(dst_addr_WB),
+	.re_mem_MEM(re_mem_MEM)			
 	);
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -202,6 +202,7 @@ EX execution(
 	.instr(instr_EX),
 	.alu_result_MEM_WB(alu_result_MEM_WB),
 	.wb_data_WB(wb_data_WB),
+	.ldata_MEM_WB(ldata_MEM_WB),
 	.prev_br_ctrl(b_ctrl_MEM),
 	.prev_j_ctrl(j_ctrl_MEM_WB),
 	.forwardA(forwardA),
@@ -335,7 +336,8 @@ FCU forwarding_control_unit(
 	.we_rf_MEM_WB(we_rf_MEM_WB), 		
 	.dst_addr_MEM_WB(dst_addr_MEM_WB), 	
 	.we_rf_WB(we_rf_WB),				
-	.dst_addr_WB(dst_addr_WB)			
+	.dst_addr_WB(dst_addr_WB),
+	.re_mem_MEM(re_mem_MEM)			
 	);
 ///////////////////////////////////////////////////////////////////////////////
 

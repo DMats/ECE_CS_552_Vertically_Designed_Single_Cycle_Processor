@@ -11,13 +11,14 @@ module forwarding_logic(
 	p0_addr_EX,
 	we_rf_WB,
 	dst_addr_WB,
+	re_mem_MEM,
 	// Output
 	forwardA,
 	forwardB
 	);
 
 
-	input we_rf_MEM_WB, we_rf_WB;
+	input we_rf_MEM_WB, we_rf_WB, re_mem_MEM;
 	input [3:0] dst_addr_MEM_WB;
 	input [3:0] p1_addr_EX;
 	input [3:0] p0_addr_EX;
@@ -26,8 +27,15 @@ module forwarding_logic(
 	output [1:0] forwardA, forwardB;
 
 
-	assign forwardA =	// Forward from MEM
-						(we_rf_MEM_WB 						&& 
+	assign forwardA =	// Forward ldata from MEM
+						(re_mem_MEM							&&
+						we_rf_MEM_WB 						&& 
+						(dst_addr_MEM_WB != 4'h0) 			&&
+						(dst_addr_MEM_WB == p1_addr_EX))	?	2'b11:
+
+						// Forward alu result from MEM
+						(!re_mem_MEM						&&
+						we_rf_MEM_WB 						&& 
 						(dst_addr_MEM_WB != 4'h0) 			&&
 						(dst_addr_MEM_WB == p1_addr_EX))	?	2'b10:
 
@@ -44,10 +52,17 @@ module forwarding_logic(
 																2'b00;
 
 
-	assign forwardB = 	// Forward from MEM
-						(we_rf_MEM_WB						&&
+	assign forwardB = 	// Forward ldata from MEM
+						(re_mem_MEM							&&
+						we_rf_MEM_WB						&&
 						(dst_addr_MEM_WB != 4'h0) 			&&
-						(dst_addr_MEM_WB == p0_addr_EX))	?	2'b10:	
+						(dst_addr_MEM_WB == p0_addr_EX))	?	2'b11:
+
+						// Forward alu result from MEM	
+						(!re_mem_MEM						&&
+						we_rf_MEM_WB						&&
+						(dst_addr_MEM_WB != 4'h0) 			&&
+						(dst_addr_MEM_WB == p0_addr_EX))	?	2'b10:
 
 						// Forward from WB
 						// But only if not already forwarding from MEM
