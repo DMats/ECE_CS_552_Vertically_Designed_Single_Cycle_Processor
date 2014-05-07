@@ -5,7 +5,7 @@ output hlt;
 output [15:0] pc;
 
 // Assign top level outputs!
-assign pc = pc_IF_ID_EX_MEM_WB;
+assign pc = pc_WB;
 assign hlt = hlt_WB;
 
 /************************ IF *************************************************/
@@ -202,6 +202,7 @@ EX execution(
 	.instr(instr_EX),
 	.alu_result_MEM_WB(alu_result_MEM_WB),
 	.wb_data_WB(wb_data_WB),
+	.ldata_MEM_WB(ldata_MEM_WB),
 	.prev_br_ctrl(b_ctrl_MEM),
 	.prev_j_ctrl(j_ctrl_MEM_WB),
 	.forwardA(forwardA),

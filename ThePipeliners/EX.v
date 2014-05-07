@@ -25,6 +25,7 @@ module EX(
 	forwardB,
 	alu_result_MEM_WB,
 	wb_data_WB,
+	ldata_MEM_WB,
 	prev_br_ctrl,
 	prev_j_ctrl
 	);
@@ -35,7 +36,7 @@ output wire [15:0] br_pc;
 output wire br_ctrl;
 
 input wire clk, rst_n;
-input wire [15:0] p0, p1, instr, pc, alu_result_MEM_WB, wb_data_WB;
+input wire [15:0] p0, p1, instr, pc, alu_result_MEM_WB, wb_data_WB, ldata_MEM_WB;
 input wire [7:0] imm8;
 input wire [3:0] shamt;
 input wire [2:0] func;
@@ -98,10 +99,12 @@ assign sdata = src1_mux;
 // Forwarding Muxes
 assign src1_mux = 	(forwardA == 2'b10) ? 	alu_result_MEM_WB	:
 					(forwardA == 2'b01) ? 	wb_data_WB 			:
+					(forwardA == 2'b11) ? 	ldata_MEM_WB		:
 					/*forwardA == 2'b00*/	p1;
 
 assign src0_mux = 	(forwardB == 2'b10) ?	alu_result_MEM_WB	:
 					(forwardB == 2'b01) ?	wb_data_WB 			:
+					(forwardB == 2'b11) ? 	ldata_MEM_WB 		:
 					/*forwardB == 2'b00*/	p0;
 
 //TODO:  WHAT IF FORWARDA/B == 2'b11  WHAT THEN???  IDK.  
