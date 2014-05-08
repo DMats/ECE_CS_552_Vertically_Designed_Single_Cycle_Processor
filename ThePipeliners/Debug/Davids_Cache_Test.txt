@@ -1,0 +1,16 @@
+# Cache Test
+# Author: David Mateo
+
+
+		llb R1, 0x80
+		lhb R1, 0x88 		# R1 <= 0x8880
+		llb R2, 0xAD
+		lhb R2, 0xDE 		# R2 <= 0xDEAD
+		llb R3, 0xEF 		
+		lhb R3, 0xBE 		# R3 <= 0xBEEF
+
+		SW R2, R1, 5 		# mem[8885] <= 0xDEAD
+
+		lw R4, R1, 5 		# R4 <= 0xDEAD <= mem[8885]
+
+		hlt

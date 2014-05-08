@@ -12,7 +12,7 @@ assign hlt = hlt_WB;
 
 // IF stage wires
 wire [15:0] instr_IF_ID_EX;
-wire [15:0] pc_IF_ID_EX_MEM_WB, alt_pc_IF;
+wire [15:0] pc_IF_ID_EX_MEM_WB, alt_pc_IF, pc_IF;
 wire alt_pc_ctrl_IF;
 wire flush_IF_ID, stall_or_hlt_IF_ID;
 
@@ -20,7 +20,7 @@ wire flush_IF_ID, stall_or_hlt_IF_ID;
 // Instantiate IF
 IF instruction_fetch(	
 	// Output
-	.instr(instr_IF_ID_EX),
+	.iaddr(pc_IF),
 	.pc_plus_1(pc_IF_ID_EX_MEM_WB),
 	// Input
 	.clk(clk),
@@ -265,6 +265,7 @@ wire wb_sel_MEM_WB, we_rf_MEM_WB, we_mem_MEM, re_mem_MEM, b_ctrl_MEM, j_ctrl_MEM
 wire [15:0] alu_result_MEM_WB, sdata_MEM, ldata_MEM_WB, addr_mem_MEM, pc_MEM_WB;
 wire [3:0] dst_addr_MEM_WB;
 
+/*
 MEM memory(
 	// Output
 	.ldata(ldata_MEM_WB),
@@ -274,7 +275,7 @@ MEM memory(
 	.we_mem(we_mem_MEM),
 	.clk(clk),
 	.addr(addr_mem_MEM)
-	);
+	);*/
 	
 assign addr_mem_MEM = alu_result_MEM_WB;
 	
@@ -349,7 +350,7 @@ FCU forwarding_control_unit(
 ///////////////////////////////////////////////////////////////////////////////
 
 // HDU ////////////////////////////////////////////////////////////////////////
-wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB;
+wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB, d_access_stall;
 
 HDU hazard_detection_unit(
 	// Output
@@ -361,8 +362,32 @@ HDU hazard_detection_unit(
 	// Input
 	.clk(clk), 
 	.rst_n(rst_n), 
-	.instr(instr_IF_ID_EX) 
+	.instr(instr_IF_ID_EX),
+	.i_rdy(i_rdy_CC),
+	.d_rdy(d_access_stall)
 	);
+	
+	assign d_access_stall = (d_rdy_CC) | (~re_mem_MEM & ~we_mem_MEM);
 ///////////////////////////////////////////////////////////////////////////////
 
+
+// Memory Heirarchy ///////////////////////////////////////////////////////////
+wire i_rdy_CC, d_rdy_CC;
+
+mem_heirarchy MH(
+	// Outputs
+	.instr(instr_IF_ID_EX),
+	.i_rdy(i_rdy_CC),
+	.d_rdy_CC(d_rdy_CC),
+	.d_rd_data(ldata_MEM_WB),
+	//Inputs
+	.clk(clk),
+	.rst_n(rst_n),
+	.i_addr(pc_IF),
+	.d_addr(addr_mem_MEM),
+	.extern_d_re(re_mem_MEM),
+	.extern_d_we(we_mem_MEM),
+	.wrt_data(sdata_MEM)
+	);
+	
 endmodule
