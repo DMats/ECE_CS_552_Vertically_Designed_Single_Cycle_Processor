@@ -1,0 +1,19 @@
+# Overflow Test
+
+		llb R1, 0x00
+		lhb R1, 0x80 	# R1 <= 0x8000
+		llb R2, 0x0F
+		lhb R2, 0x80	# R2 <= 0x800F
+
+		add R3, R1, R2	# R3 <= 0x8000
+		sub R4, R2, R1 	# R4 <= 0x000F
+		sub R5, R1, R2 	# R5 <= 0xFFF1
+
+		llb R6, 0xF1	
+		lhb R6, 0x7F 	# R6 <= 0x7FF1
+		llb R7, 0xF2
+		lhb R7, 0x7F 	# R7 <= 0x7FF2
+
+		add R8, R6, R7 	# R8 <= 0x7FFF
+		sub R9, R7, R6 	# R9 <= 0x0001
+		sub R10, R6, R7 # R10 <= 0xFFFF

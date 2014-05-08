@@ -56,7 +56,7 @@ IF_ID_FF IF_ID(
 	);
 	
 	assign flush_IF_ID = (b_ctrl_EX_MEM | j_ctrl_ID_EX_MEM_WB) ? 1'b1 : 1'b0;
-	assign stall_or_hlt_IF_ID = stall_IF_ID | hlt_EX_MEM_WB;
+	assign stall_or_hlt_IF_ID = stall_IF_ID | hlt_ID_EX_MEM_WB;
 ///////////////////////////////////////////////////////////////////////////////
 
 

@@ -47,7 +47,7 @@ module ID_EX_FF(
 			wb_sel_EX <= 1'b0;
 			dst_addr_EX <= 4'h0;
 			src1sel_EX <= 1'b0;
-			instr_EX <= 16'h0000;
+			instr_EX <= 16'hB000;
 			pc_EX <= 16'h0000;
 			hlt_EX <= 1'b0;
 			j_ctrl_EX <= 1'b0;

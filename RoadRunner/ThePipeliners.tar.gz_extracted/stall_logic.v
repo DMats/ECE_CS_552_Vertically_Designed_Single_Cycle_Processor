@@ -16,8 +16,8 @@ module stall_logic(clk, rst_n, instr, stall);
 	reg [1:0] state, next_state;
 
 	wire hazard;
-	wire [3:0] curr_opcode, prev_opcode, curr_src1, curr_src2, curr_src_sw, prev_dest;
-	wire two_sources, one_source, store_source;
+	wire [3:0] curr_opcode, prev_opcode, curr_src1, curr_src2, curr_src_sw, curr_src_jr, prev_dest;
+	wire two_sources, one_source, store_source, jump_reg_source;
 
 	// States
 	localparam STATE_START 		= 2'b00;
@@ -60,18 +60,20 @@ module stall_logic(clk, rst_n, instr, stall);
 	assign curr_src1 = curr_instr[7:4];
 	assign curr_src2 = curr_instr[3:0];
 	assign curr_src_sw = curr_instr[11:8];
+	assign curr_src_jr = curr_instr[7:4];
 	assign prev_opcode = prev_instr[15:12];
 	assign prev_dest = prev_instr[11:8];
-	assign two_sources 	= 	((curr_opcode==addOp) 	||
-							(curr_opcode==addzOp)	||
-							(curr_opcode==subOp) 	||
-							(curr_opcode==andOp)	||
-							(curr_opcode==norOp));
-	assign one_source	= 	((curr_opcode==sllOp)	||
-							(curr_opcode==srlOp)	||
-							(curr_opcode==sraOp)	||
-							(curr_opcode==lwOp));
-	assign store_source =   (curr_opcode==swOp);
+	assign two_sources 		=	((curr_opcode==addOp) 	||
+								(curr_opcode==addzOp)	||
+								(curr_opcode==subOp) 	||
+								(curr_opcode==andOp)	||
+								(curr_opcode==norOp));
+	assign one_source		=	((curr_opcode==sllOp)	||
+								(curr_opcode==srlOp)	||
+								(curr_opcode==sraOp)	||
+								(curr_opcode==lwOp));
+	assign store_source 	=  	(curr_opcode==swOp);
+	assign jump_reg_source 	=	(curr_opcode==jrOp); 
 	// I realized that I could have used the read enable instead of the above nonsense.
 	// But it's too late!  No turning back now!
 
@@ -86,7 +88,10 @@ module stall_logic(clk, rst_n, instr, stall);
 					(prev_dest==curr_src1))			||
 					((prev_opcode==lwOp)	&&
 					(store_source)			&&
-					(prev_dest==curr_src_sw)));
+					(prev_dest==curr_src_sw))		||
+					((prev_opcode==lwOp)	&&
+					(jump_reg_source) 		&&
+					(prev_dest==curr_src_jr)));
 
 	// Stall State Machine - Sequential Logic //
 	always @(posedge clk, negedge rst_n) begin

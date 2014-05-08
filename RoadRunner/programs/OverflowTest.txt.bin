@@ -1,0 +1,14 @@
+@0000 B100	// llb R1, 0x00
+@0001 A180	// lhb R1, 0x80
+@0002 B20F	// llb R2, 0x0F
+@0003 A280	// lhb R2, 0x80
+@0004 0312	// add R3, R1, R2
+@0005 2421	// sub R4, R2, R1
+@0006 2512	// sub R5, R1, R2
+@0007 B6F1	// llb R6, 0xF1
+@0008 A67F	// lhb R6, 0x7F
+@0009 B7F2	// llb R7, 0xF2
+@000a A77F	// lhb R7, 0x7F
+@000b 0867	// add R8, R6, R7
+@000c 2976	// sub R9, R7, R6
+@000d 2A67	// sub R10, R6, R7
