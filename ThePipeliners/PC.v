@@ -11,6 +11,7 @@ input wire clk, rst_n, hlt, alt_pc_ctrl, stall;
 
 wire [15:0] next_iaddr;
 
+
 // Sequential Logic
 ///////////////////////////////////////////////
 always @(posedge clk, negedge rst_n) begin

@@ -13,6 +13,6 @@ R0000000c = xxxx
 R0000000d = xxxx
 R0000000e = 0000
 R0000000f = xxxx
-Time:        115
-Cycles:       11
+Time:        161
+Cycles:       16
 PC:         000c

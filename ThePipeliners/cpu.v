@@ -5,7 +5,7 @@ output hlt;
 output [15:0] pc;
 
 // Assign top level outputs!
-assign pc = pc_IF_ID_EX_MEM_WB;
+assign pc = pc_WB;
 assign hlt = hlt_WB;
 
 /************************ IF *************************************************/
@@ -73,7 +73,7 @@ wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
 	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX_MEM_WB, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
-	hlt_ID_EX_MEM_WB_CTRL;
+	hlt_ID_EX_MEM_WB_CTRL, flush_ID_EX;
 
 // Instantiate ID
 ID instruction_decode(	
@@ -157,9 +157,11 @@ ID_EX_FF ID_EX(
 	.hlt_ID(hlt_ID_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
-	.stall(stall_or_hlt_ID_EX)
+	.stall(stall_or_hlt_ID_EX),
+	.flush(flush_ID_EX)
 	);
 
+	assign flush_ID_EX = (b_ctrl_EX_MEM) ? 1'b1 : 1'b0;
 	assign stall_or_hlt_ID_EX = stall_ID_EX | hlt_EX_MEM_WB;
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -177,12 +179,14 @@ wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB
 wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, j_ctrl_EX_MEM_WB;
 wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
 
+wire [15:0] alu_result_EX_MEM_WB_lcl;
+
 localparam addzOp = 4'b0001;
 
 // Instantiate EX
 EX execution(
 	// Output
-	.dst(alu_result_EX_MEM_WB),
+	.dst(alu_result_EX_MEM_WB_lcl),
 	.N(N_EX),
 	.Z(Z_EX),
 	.V(V_EX),
@@ -202,12 +206,14 @@ EX execution(
 	.instr(instr_EX),
 	.alu_result_MEM_WB(alu_result_MEM_WB),
 	.wb_data_WB(wb_data_WB),
+	.ldata_MEM_WB(ldata_MEM_WB),
 	.prev_br_ctrl(b_ctrl_MEM),
 	.prev_j_ctrl(j_ctrl_MEM_WB),
 	.forwardA(forwardA),
 	.forwardB(forwardB)
 	);
 
+assign alu_result_EX_MEM_WB = (j_ctrl_EX_MEM_WB) ? pc_EX_MEM_WB : alu_result_EX_MEM_WB_lcl;
 assign we_rf_EX_MEM_WB_mux = ((instr_EX[15:12] == addzOp)&&(~Z_EX))	? 1'b0 : we_rf_EX_MEM_WB;
 
 /************************ EX *************************************************/
@@ -335,7 +341,8 @@ FCU forwarding_control_unit(
 	.we_rf_MEM_WB(we_rf_MEM_WB), 		
 	.dst_addr_MEM_WB(dst_addr_MEM_WB), 	
 	.we_rf_WB(we_rf_WB),				
-	.dst_addr_WB(dst_addr_WB)			
+	.dst_addr_WB(dst_addr_WB),
+	.re_mem_MEM(re_mem_MEM)			
 	);
 ///////////////////////////////////////////////////////////////////////////////
 

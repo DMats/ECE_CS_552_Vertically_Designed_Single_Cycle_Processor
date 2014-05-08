@@ -50,8 +50,8 @@ module ID(
 	output re_mem, we_mem, wb_sel, j_ctrl, we_rf;
 	
 	// Local Wires //
-	wire [15:0] dst_data, JR_REG;
-	wire re0, re1, we, JR_EX_FORWARD, JR_MEM_FORWARD, JR_ID;
+	wire [15:0] JR_REG;
+	wire re0, re1, JR_EX_FORWARD, JR_MEM_FORWARD, JR_ID;
 	
 	// Relevant Opcodes
 	localparam jalOp = 4'b1101;
@@ -106,32 +106,15 @@ module ID(
 		.JR_ID(JR_ID)
 		);
 		
-	
-
-	// The Jump logic below is necessary because as soon as we know 
-	// that we're jumping, we want to process it immediately without
-	// sending it through the EX stage and beyond.  This makes it so no
-	// flushes are necessary on jumps.	
+	// Jumps definitely cause flushing.	
 	assign JR_REG = (JR_MEM_FORWARD)	?	MEM_data:
 					(JR_EX_FORWARD)		?	EX_data:
 					(JR_ID)				?	p0:
 											16'hxxxx;
 	
-	
 	assign j_ctrl = ((instr[15:12] == jalOp)||(instr[15:12] == jrOp));
 	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+{{4{instr[11]}}, instr[11:0]}):
 					(instr[15:12] == jrOp) 	? JR_REG:
 											  16'hxxxx;	
-
-	// Arguably, this statement could be in WB, but I decided to put it here.
-	assign dst_data = (instr[15:12] == jalOp)	?	(pc)	:	dst_data_WB;
-
-	// The following line is duplicated inside of instr_decode but I copied it here too.
-	// I didn't remove the other one because unsure if it's necessary, but it has
-	// no bearing on this dst_addr.
-	assign dst_addr = (instr[15:12] == jalOp)	? 	4'b1111	:	dst_addr_WB;
-
-	// If it's a jal, we want to be able to write to R15 right away.
-	assign we 		= (instr[15:12] == jalOp)	? 	1'b1 	:	we_WB;
 
 endmodule

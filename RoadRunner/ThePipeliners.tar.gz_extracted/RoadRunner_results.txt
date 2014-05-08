@@ -1,11 +1,12 @@
-another_sample.asm, pass, 5, 1
-BasicOpCodes2.txt, pass, 37, 31
-BasicOpCodes4.txt, pass, 19, 10
-NOP_test.txt, fail
-Prog0.asm, fail
-prog1.txt, fail
-prog5.txt, pass, 512, 256
-sample.txt, pass, 5, 1
-Test_Basic.asm, pass, 19, 15
-Test_Forward.asm, pass, 23, 19
-Test_Simple_2.asm, pass, 28, 21
+another_sample.asm, pass, 5, 5
+BasicOpCodes2.txt, pass, 37, 37
+BasicOpCodes4.txt, pass, 19, 22
+jal_jr_r15.txt, pass, 16, 18
+NOP_test.txt, pass, 18, 18
+Prog0.asm, pass, 16, 16
+prog1.txt, pass, 10, 10
+prog5.txt, pass, 512, 511
+sample.txt, pass, 5, 5
+Test_Basic.asm, pass, 19, 19
+Test_Forward.asm, pass, 23, 23
+Test_Simple_2.asm, pass, 28, 29
