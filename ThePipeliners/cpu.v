@@ -369,7 +369,7 @@ mem_heirarchy MH(
 	// Outputs
 	.instr(instr_IF_ID_EX),
 	.i_rdy(i_rdy_CC),
-	.d_rdy(d_rdy_CC),
+	.d_rdy_CC(d_rdy_CC),
 	.d_rd_data(ldata_MEM_WB),
 	//Inputs
 	.clk(clk),

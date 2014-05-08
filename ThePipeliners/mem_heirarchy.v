@@ -2,7 +2,7 @@ module mem_heirarchy(
 	// Inputs
 	i_addr, d_addr, wrt_data, extern_d_re, extern_d_we, clk, rst_n,
 	//Outputs
-	instr, i_rdy, d_rd_data, d_rdy
+	instr, i_rdy, d_rd_data, d_rdy_CC
 	);
 	
 	// Inputs
@@ -11,7 +11,7 @@ module mem_heirarchy(
 	
 	// Outputs
 	output wire [15:0] instr, d_rd_data;
-	output wire i_rdy, d_rdy;
+	output wire i_rdy, d_rdy_CC;
 	
 	wire [63:0] i_wr_data, u_wr_data, u_rd_data, i_cache_line, updated_d_line, d_data, d_cache_line;
 	wire [13:0] u_addr, d_constr_addr;
@@ -33,11 +33,12 @@ module mem_heirarchy(
 		// Outputs
 		.u_re(u_re),
 		.i_we(i_we),
-		.d_we(d_we),
-		.d_re(d_re),
 		.addr_sel(addr_sel),
 		.evict(evict),
-		.d_set_dirty(set_dirty)
+		.d_set_dirty(set_dirty),
+		.d_data_sel(d_data_sel),
+		.d_we_CC(d_we_CC),
+		.d_rdy_CC(d_rdy_CC)
 		);
 		
 	cache IC(
@@ -66,9 +67,9 @@ module mem_heirarchy(
 		//Inputs
 		.addr(d_addr[15:2]),
 		.wr_data(d_data),
-		.we(d_we_mux),
-		.re(d_re_mux),
-		.wdirty(write_dirty),
+		.we(d_we_CC),
+		.re(extern_d_re),
+		.wdirty(set_dirty),
 		.clk(clk),
 		.rst_n(rst_n),
 		// Outputs
@@ -77,9 +78,6 @@ module mem_heirarchy(
 		.hit(d_rdy),
 		.dirty(d_dirty)
 		);
-		
-	assign d_we_mux = (d_rdy) ? extern_d_we : d_we;
-	assign d_re_mux = (d_rdy) ? extern_d_re : d_re;
 	
 	assign updated_d_line = (d_offset == 2'b00)	?	{d_cache_line[63:16], wrt_data}: 
 							(d_offset == 2'b01)	?	{d_cache_line[63:32], wrt_data, d_cache_line[15:0]}:
@@ -87,7 +85,7 @@ module mem_heirarchy(
 							(d_offset == 2'b11)	?	{wrt_data, d_cache_line[47:0]}:
 													64'hxxxx_xxxx_xxxx_xxxx;
 		
-	assign d_data = (d_rdy) ? updated_d_line : u_rd_data;
+	assign d_data = (d_data_sel) ? u_rd_data : updated_d_line;
 		
 	assign d_offset = d_addr[1:0];	
 	assign d_rd_data = 	(d_offset == 2'b00)	?	d_cache_line[15:0]:
