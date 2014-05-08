@@ -5,7 +5,7 @@ Davids_Cache_Test.txt, pass, 25, 24
 force_store_evict.asm, fail
 jal_jr_r15.txt, fail
 NOP_test.txt, pass, 34, 30
-OverflowTest.txt, fail
+OverflowTest.txt, pass, 40, 35
 Prog0.asm, pass, 33, 35
 prog1.txt, pass, 18, 19
 prog5.txt, pass, 520, 517

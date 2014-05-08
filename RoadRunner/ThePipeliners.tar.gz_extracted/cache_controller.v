@@ -242,10 +242,10 @@ module cache_controller(
 				if(u_rdy) begin
 					next_state = state_d_w_miss;
 					evict = 0;
-					u_re = 1;
+					u_re = 0;
 					u_we = 0;
 					//d_re = 0;
-					d_we_CC = 1;
+					d_we_CC = 0;
 					i_we = 0;
 					addr_sel = 1;
 					d_set_dirty = 0;
@@ -293,7 +293,7 @@ module cache_controller(
 					i_we = 0;
 					addr_sel = 0;
 					d_data_sel = 0;
-					d_set_dirty = 0;
+					d_set_dirty = 1;
 					d_rdy_CC = 1;						
 				end
 				else begin
@@ -304,7 +304,7 @@ module cache_controller(
 					//d_re = 0;
 					d_we_CC = 0;
 					i_we = 0;
-					addr_sel = 0;
+					addr_sel = 1;
 					d_data_sel = 0;
 					d_set_dirty = 0;
 					d_rdy_CC = 0;	

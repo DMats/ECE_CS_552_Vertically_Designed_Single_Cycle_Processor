@@ -48,9 +48,15 @@ module ALU(opcode, ops, src1, src0, shamt, prev_br_ctrl, prev_j_ctrl, clk, rst_n
 								(ops==sub16)	?	(src1 - src0):
 													17'hxxxxx;
 								
-	assign exception = ((ops==sub16) & (src1[15] == src0[15]));
-	assign ov_pos = (~src0[15] & ~src1[15] & arithmetic_temp[15] & ~exception);
-	assign ov_neg = (src0[15] & src1[15] & ~arithmetic_temp[15] & ~exception);
+	assign exception = 	((ops==add16) & (src1[15] != src0[15])) || 
+						((ops==sub16) & (src1[15] == src0[15]));
+	assign ov_pos = (ops==add16) ? 	(~src0[15] & ~src1[15] & arithmetic_temp[15] & ~exception):
+					(ops==sub16) ? 	(src0[15] & ~src1[15] & arithmetic_temp[15] & ~exception):
+									1'b0;
+
+	assign ov_neg = (ops==add16) ? 	(src0[15] & src1[15] & ~arithmetic_temp[15] & ~exception):
+					(ops==sub16) ? 	(~src0[15] & src1[15] & ~arithmetic_temp[15] & ~exception):
+									1'b0;
 	
 	assign temp_dst = 	(ov_pos)	?	(16'h7FFF):
 						(ov_neg)	?	(16'h8000):
