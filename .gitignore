@@ -11,3 +11,5 @@ ThePipeliners/cpu_tb.v~
 ThePipeliners/instr_mem.v~
 ThePipeliners/rf_pipelines.v~
 ThePipeliners/transcript
+ThePipeliners/instr.hex
+ThePipeliners/Debug/instr.hex
