@@ -1,0 +1,9 @@
+# Simple Jump Test
+
+		LLB R1, 0x05
+		SW R1, R0, 1
+		LW R2, R0, 1
+		JR R2
+		LLB R5, 0x01		# This instruction should be skipped.
+		ADD R3, R1, R1
+		HLT

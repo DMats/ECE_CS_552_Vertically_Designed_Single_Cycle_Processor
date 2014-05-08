@@ -29,7 +29,9 @@ module ID(
 	we_WB,
 	hlt_WB,
 	MEM_data,
+	MEM_ldata,
 	MEM_we,
+	MEM_mem_re,
 	MEM_dst,
 	EX_data,
 	EX_we,
@@ -37,9 +39,9 @@ module ID(
 	);
 	
 	// Inputs //
-	input [15:0] instr, pc, dst_data_WB, MEM_data, EX_data;
+	input [15:0] instr, pc, dst_data_WB, MEM_data, EX_data, MEM_ldata;
 	input [3:0] dst_addr_WB, MEM_dst, EX_dst;
-	input clk, rst_n, we_WB, hlt_WB, MEM_we, EX_we;
+	input clk, rst_n, we_WB, hlt_WB, MEM_we, EX_we, MEM_mem_re;
 	
 	// Outputs //
  	output [15:0] p0, p1, j_pc;
@@ -51,7 +53,7 @@ module ID(
 	
 	// Local Wires //
 	wire [15:0] JR_REG;
-	wire re0, re1, JR_EX_FORWARD, JR_MEM_FORWARD, JR_ID;
+	wire re0, re1, JR_MEM_LDATA_FORWARD, JR_EX_FORWARD, JR_MEM_FORWARD, JR_ID;
 	
 	// Relevant Opcodes
 	localparam jalOp = 4'b1101;
@@ -100,16 +102,19 @@ module ID(
 		.EX_dst(EX_dst),
 		.EX_we(EX_we),
 		.JR(p0_addr),
+		.MEM_mem_re(MEM_mem_re),
 		//outputs
+		.JR_MEM_LDATA_FORWARD(JR_MEM_LDATA_FORWARD),
 		.JR_MEM_FORWARD(JR_MEM_FORWARD),
 		.JR_EX_FORWARD(JR_EX_FORWARD),
 		.JR_ID(JR_ID)
 		);
 		
 	// Jumps definitely cause flushing.	
-	assign JR_REG = (JR_MEM_FORWARD)	?	MEM_data:
-					(JR_EX_FORWARD)		?	EX_data:
-					(JR_ID)				?	p0:
+	assign JR_REG = (JR_MEM_LDATA_FORWARD)	?	MEM_ldata:
+					(JR_MEM_FORWARD)		?	MEM_data:
+					(JR_EX_FORWARD)			?	EX_data:
+					(JR_ID)					?	p0:
 											16'hxxxx;
 	
 	assign j_ctrl = ((instr[15:12] == jalOp)||(instr[15:12] == jrOp));

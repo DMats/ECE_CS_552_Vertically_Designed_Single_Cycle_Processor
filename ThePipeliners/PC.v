@@ -26,7 +26,7 @@ end
 
 // Combinational Logic
 ///////////////////////////////////////////////
-assign next_iaddr = (alt_pc_ctrl)	?	alt_pc:
+assign next_iaddr = (alt_pc_ctrl && !stall && !hlt)	?	alt_pc:
 					(hlt || stall)	? 	iaddr : 
 										pc_plus_1;
 assign pc_plus_1 = iaddr + 1;

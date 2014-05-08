@@ -1,0 +1,24 @@
+# Branch-pocalypse Test #
+# Author: David Mateo   #
+#########################
+
+		LLB R1, 0x11
+		LLB R2, 0x22
+		SUB R0, R1, R1		# Set the Z Flag
+
+Targ0:
+
+Targ1:
+
+Targ2:
+
+Targ3:
+
+Targ4:
+
+Targ5:
+
+Targ6:
+
+Targ7:
+
