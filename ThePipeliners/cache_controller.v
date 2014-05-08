@@ -81,7 +81,7 @@ module cache_controller(
 					d_rdy_CC = 0;
 					//stall = 1;
 				end
-				else if (~d_rdy) begin
+				else if (~d_rdy | data_re | data_we) begin
 					if(data_re & dirty) begin // Here we evict data before handling the miss
 						next_state = state_d_rd_evict;
 						evict = 1; // Choose the reconstructed address for data being evicted
@@ -132,6 +132,7 @@ module cache_controller(
 						addr_sel = 1;
 						d_set_dirty = 1;
 						d_data_sel = 0;
+						d_rdy_CC = 0;
 					end
 				end
 			end
@@ -148,6 +149,7 @@ module cache_controller(
 					i_we = 1;
 					addr_sel = 0;
 					d_set_dirty = 0;
+					d_rdy_CC = 0;
 				end
 				else begin
 					next_state = state_i_rd;
@@ -159,6 +161,7 @@ module cache_controller(
 					i_we = 0;
 					addr_sel = 0;
 					d_set_dirty = 0;
+					d_rdy_CC = 0;
 				end
 			end
 			

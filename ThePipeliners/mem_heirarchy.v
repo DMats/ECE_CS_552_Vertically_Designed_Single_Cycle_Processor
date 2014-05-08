@@ -32,6 +32,7 @@ module mem_heirarchy(
 		.dirty(d_dirty),
 		// Outputs
 		.u_re(u_re),
+		.u_we(u_we),
 		.i_we(i_we),
 		.addr_sel(addr_sel),
 		.evict(evict),
