@@ -54,7 +54,6 @@ module cache_controller(
 					u_re = 0;
 					u_we = 0;
 					//d_re = 0;
-					d_we_CC = 0;
 					i_we = 0;
 					addr_sel = 0;
 					d_data_sel = 0;
@@ -65,6 +64,7 @@ module cache_controller(
 					end
 					else begin
 						d_set_dirty = 0;
+						d_we_CC = 0;
 					end
 					//stall = 0;
 				end
