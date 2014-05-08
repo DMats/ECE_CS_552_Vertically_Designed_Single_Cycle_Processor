@@ -69,7 +69,7 @@ module mem_heirarchy(
 		.addr(d_addr[15:2]),
 		.wr_data(d_data),
 		.we(d_we_CC),
-		.re(extern_d_re),
+		.re(1'b1),
 		.wdirty(set_dirty),
 		.clk(clk),
 		.rst_n(rst_n),
