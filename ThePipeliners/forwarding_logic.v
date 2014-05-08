@@ -76,59 +76,5 @@ module forwarding_logic(
 						)									?	2'b01:
 																2'b00;
 
-
-/*	// ForwardA controls the mux for src1, p1, muxA, Rs
-	assign forwardA = 	((two_sources||one_source)						&&
-						(we_rf_MEM_WB) 									&& 
-						(dst_addr_MEM_WB != 4'h0) 						&& 
-						(dst_addr_MEM_WB == p1_addr_EX)) 		? 	2'b10:
-						((two_sources||one_source||jump_reg_source)		&&
-						(we_rf_WB)										&&
-						(dst_addr_WB != 4'h0)							&&
-						(!((two_sources||one_source)					&&
-						we_rf_MEM_WB 									&&
-						(dst_addr_MEM_WB != 4'b0)						&&
-						(dst_addr_MEM_WB != p1_addr_EX)))				&&
-						(dst_addr_WB == p1_addr_EX))			?	2'b01:
-																	2'b00;
-
-	LOL THIS IS THE RESULT OF TRYING TO VERILOG AT 3AM
-	
-	// ForwardB controls the mux for src0, p0, muxB, Rt
-	assign forwardB =	(((two_sources)								&&
-						(we_rf_MEM_WB)								&&
-						(dst_addr_MEM_WB != 4'h0)					&&
-						(dst_addr_MEM_WB == p0_addr_EX))			||
-						(jump_reg_source)							&&
-						(we_rf_MEM_WB)								&&
-						(dst_addr_MEM_WB != 4'h0)					&&
-						(dst_addr_MEM_WB == p1_addr_EX))	?	2'b10:
-						(((two_sources)								&&
-						(we_rf_WB)									&&
-						(dst_addr_WB != 4'h0)						&&
-						(!(((two_sources)							&&
-						(we_rf_MEM_WB)								&&
-						(dst_addr_MEM_WB != 4'h0)					&&
-						(dst_addr_MEM_WB == p0_addr_EX))			||
-						((jump_reg_source)							&&
-						(we_rf_MEM_WB)								&&
-						(dst_addr_MEM_WB != 4'h0)					&&
-						(dst_addr_MEM_WB == p1_addr_EX))))			&&
-						(dst_addr_WB == p0_addr_EX))				||
-						((jump_reg_source)							&&
-						(we_rf_WB)									&&
-						(dst_addr_WB != 4'h0)						&&
-						(!(((two_sources)							&&
-						(we_rf_MEM_WB)								&&
-						(dst_addr_MEM_WB != 4'h0)					&&
-						(dst_addr_MEM_WB == p0_addr_EX))			||
-						((jump_reg_source)							&&
-						(we_rf_MEM_WB)								&&
-						(dst_addr_MEM_WB != 4'h0)					&&
-						(dst_addr_MEM_WB == p1_addr_EX))))			&&
-						(dst_addr_WB == p1_addr_EX)))		?	2'b01:
-																2'b00;
-*/
-
 endmodule
 

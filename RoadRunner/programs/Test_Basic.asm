@@ -54,3 +54,5 @@ llb R15, 0xFF
 //sw R1, R2, 0 			// Setup memory
 //lw R10, R2, 0 		// SW/LW Test:  R10 should get 0x0011
 
+  hlt
+

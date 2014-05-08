@@ -73,7 +73,7 @@ wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
 	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX_MEM_WB, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
-	hlt_ID_EX_MEM_WB_CTRL;
+	hlt_ID_EX_MEM_WB_CTRL, flush_ID_EX;
 
 // Instantiate ID
 ID instruction_decode(	
@@ -157,9 +157,11 @@ ID_EX_FF ID_EX(
 	.hlt_ID(hlt_ID_EX_MEM_WB),
 	.clk(clk),
 	.rst_n(rst_n),
-	.stall(stall_or_hlt_ID_EX)
+	.stall(stall_or_hlt_ID_EX),
+	.flush(flush_ID_EX)
 	);
 
+	assign flush_ID_EX = (b_ctrl_EX_MEM) ? 1'b1 : 1'b0;
 	assign stall_or_hlt_ID_EX = stall_ID_EX | hlt_EX_MEM_WB;
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -177,12 +179,14 @@ wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB
 wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, j_ctrl_EX_MEM_WB;
 wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
 
+wire [15:0] alu_result_EX_MEM_WB_lcl;
+
 localparam addzOp = 4'b0001;
 
 // Instantiate EX
 EX execution(
 	// Output
-	.dst(alu_result_EX_MEM_WB),
+	.dst(alu_result_EX_MEM_WB_lcl),
 	.N(N_EX),
 	.Z(Z_EX),
 	.V(V_EX),
@@ -209,6 +213,7 @@ EX execution(
 	.forwardB(forwardB)
 	);
 
+assign alu_result_EX_MEM_WB = (j_ctrl_EX_MEM_WB) ? pc_EX_MEM_WB : alu_result_EX_MEM_WB_lcl;
 assign we_rf_EX_MEM_WB_mux = ((instr_EX[15:12] == addzOp)&&(~Z_EX))	? 1'b0 : we_rf_EX_MEM_WB;
 
 /************************ EX *************************************************/

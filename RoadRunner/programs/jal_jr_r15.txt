@@ -1,0 +1,17 @@
+# JAL followed by JR R15 Test
+
+		LLB R1, 0x11
+		LLB R2, 0x22
+		SUB R0, R1, R1 		# Set the Z flag
+		JAL Temp			# Jump Immediately
+		B eq, Pass			# Branch to Pass
+		B uncond, Fail  	
+Temp: 	JR R15				# Return Immediately
+		SUB R4, R1, R2		# Should not Happen but if it does, sets N flag
+		
+Fail:	LLB R1, 0xFF
+		HLT
+
+Pass: 	LLB R1, 0xAA
+		LHB R1, 0xAA
+		HLT

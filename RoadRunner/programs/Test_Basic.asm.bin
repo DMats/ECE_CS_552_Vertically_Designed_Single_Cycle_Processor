@@ -13,3 +13,4 @@
 @000c BDDD	// llb R13, 0xDD
 @000d BEEE	// llb R14, 0xEE
 @000e BFFF	// llb R15, 0xFF
+@000f F000	// hlt

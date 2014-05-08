@@ -26,7 +26,7 @@ module IF_ID_FF(
 	end
 	
 	// Combinational Logic
-	assign next_instr = (flush) ? 	16'h0000 	:
+	assign next_instr = (flush) ? 	16'hB000 	:
 						(stall) ? 	instr_ID 	: 
 									instr_IF;
 
