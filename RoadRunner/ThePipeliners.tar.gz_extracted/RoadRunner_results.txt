@@ -12,4 +12,4 @@ prog5.txt, pass, 520, 517
 sample.txt, pass, 9, 8
 Test_Basic.asm, pass, 39, 34
 Test_Forward.asm, pass, 47, 41
-Test_Simple_2.asm, fail
+Test_Simple_2.asm, pass, 29, 25

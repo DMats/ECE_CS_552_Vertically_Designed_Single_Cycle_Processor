@@ -1,8 +1,59 @@
 module cpu(hlt, pc, clk, rst_n);
 
+// Inputs and Outputs
 input clk, rst_n;
 output hlt;
 output [15:0] pc;
+
+// IF stage wires
+wire [15:0] instr_IF_ID_EX;
+wire [15:0] pc_IF_ID_EX_MEM_WB, alt_pc_IF, pc_IF;
+wire alt_pc_ctrl_IF;
+wire flush_IF_ID, stall_or_hlt_IF_ID;
+
+// ID stage wires
+wire [15:0] instr_ID_EX;
+wire [15:0] pc_ID_EX_MEM_WB, j_pc_ID;
+wire [15:0] p0_ID_EX, p1_ID_EX;
+wire [7:0] imm8_ID_EX;
+wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
+wire [2:0] func_ID_EX;
+wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
+	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX_MEM_WB, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
+	hlt_ID_EX_MEM_WB_CTRL, flush_ID_EX, prev_stall_IF_ID, prev_flush_IF_ID;
+
+// EX stage wires
+wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, b_pc_EX, sdata_EX_MEM, 
+	alu_result_EX_MEM_WB, pc_EX_MEM_WB;
+wire [7:0] imm8_EX;
+wire [3:0] shamt_EX, dst_addr_EX_MEM_WB, p0_addr_EX, p1_addr_EX;
+wire [2:0] func_EX;
+wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
+wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, j_ctrl_EX_MEM_WB;
+wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
+wire [15:0] alu_result_EX_MEM_WB_lcl;
+
+localparam addzOp = 4'b0001;
+
+// MEM stage wires
+wire wb_sel_MEM_WB, we_rf_MEM_WB, we_mem_MEM, re_mem_MEM, b_ctrl_MEM, j_ctrl_MEM_WB, stall_or_hlt_MEM_WB, hlt_MEM_WB;
+wire [15:0] alu_result_MEM_WB, sdata_MEM, ldata_MEM_WB, addr_mem_MEM, pc_MEM_WB;
+wire [3:0] dst_addr_MEM_WB;
+
+// WB stage wires
+wire [15:0] wb_data_WB, alu_result_WB, ldata_WB, pc_WB;
+wire we_rf_WB, wb_sel_WB, hlt_WB;
+wire [3:0] dst_addr_WB;
+
+// FCU Wires
+wire [1:0] forwardA, forwardB;
+
+// HDU wires
+wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB, d_access_stall;
+
+// Mem Heirarchy wires
+wire i_rdy_CC, d_rdy_CC;
+
 
 // Assign top level outputs!
 assign pc = pc_WB;
@@ -10,11 +61,7 @@ assign hlt = hlt_WB;
 
 /************************ IF *************************************************/
 
-// IF stage wires
-wire [15:0] instr_IF_ID_EX;
-wire [15:0] pc_IF_ID_EX_MEM_WB, alt_pc_IF, pc_IF;
-wire alt_pc_ctrl_IF;
-wire flush_IF_ID, stall_or_hlt_IF_ID;
+
 
 
 // Instantiate IF
@@ -65,17 +112,6 @@ IF_ID_FF IF_ID(
 
 
 /************************ ID *************************************************/
-
-// ID stage wires
-wire [15:0] instr_ID_EX;
-wire [15:0] pc_ID_EX_MEM_WB, j_pc_ID;
-wire [15:0] p0_ID_EX, p1_ID_EX;
-wire [7:0] imm8_ID_EX;
-wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
-wire [2:0] func_ID_EX;
-wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
-	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX_MEM_WB, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
-	hlt_ID_EX_MEM_WB_CTRL, flush_ID_EX, prev_stall_IF_ID, prev_flush_IF_ID;
 
 // Instantiate ID
 ID instruction_decode(	
@@ -173,19 +209,9 @@ ID_EX_FF ID_EX(
 
 /************************ EX *************************************************/
 
-// EX stage wires
-wire [15:0] p0_EX, p1_EX, jump_reg_EX, instr_EX, b_pc_EX, sdata_EX_MEM, 
-	alu_result_EX_MEM_WB, pc_EX_MEM_WB;
-wire [7:0] imm8_EX;
-wire [3:0] shamt_EX, dst_addr_EX_MEM_WB, p0_addr_EX, p1_addr_EX;
-wire [2:0] func_EX;
-wire src1sel_EX, we_mem_EX_MEM, re_mem_EX_MEM, wb_sel_EX_MEM_WB, we_rf_EX_MEM_WB;
-wire N_EX, Z_EX, V_EX, b_ctrl_EX_MEM, j_ctrl_EX_MEM_WB;
-wire we_rf_EX_MEM_WB_mux, hlt_EX_MEM_WB, stall_or_hlt_EX_MEM;
 
-wire [15:0] alu_result_EX_MEM_WB_lcl;
 
-localparam addzOp = 4'b0001;
+
 
 // Instantiate EX
 EX execution(
@@ -261,23 +287,6 @@ EX_MEM_FF EX_MEM(
 
 
 /************************ MEM *************************************************/
-
-// MEM stage wires
-wire wb_sel_MEM_WB, we_rf_MEM_WB, we_mem_MEM, re_mem_MEM, b_ctrl_MEM, j_ctrl_MEM_WB, stall_or_hlt_MEM_WB, hlt_MEM_WB;
-wire [15:0] alu_result_MEM_WB, sdata_MEM, ldata_MEM_WB, addr_mem_MEM, pc_MEM_WB;
-wire [3:0] dst_addr_MEM_WB;
-
-/*
-MEM memory(
-	// Output
-	.ldata(ldata_MEM_WB),
-	// Input
-	.sdata(sdata_MEM),
-	.re_mem(re_mem_MEM),
-	.we_mem(we_mem_MEM),
-	.clk(clk),
-	.addr(addr_mem_MEM)
-	);*/
 	
 assign addr_mem_MEM = alu_result_MEM_WB;
 	
@@ -316,9 +325,7 @@ MEM_WB_FF MEM_WB(
 
 
 /************************ WB *************************************************/
-wire [15:0] wb_data_WB, alu_result_WB, ldata_WB, pc_WB;
-wire we_rf_WB, wb_sel_WB, hlt_WB;
-wire [3:0] dst_addr_WB;
+
 
 WB write_back(
 	// Output
@@ -334,7 +341,7 @@ WB write_back(
 /************************ WB *************************************************/
 
 // FCU ////////////////////////////////////////////////////////////////////////
-wire [1:0] forwardA, forwardB;
+
 
 FCU forwarding_control_unit(
 	// Output
@@ -352,7 +359,6 @@ FCU forwarding_control_unit(
 ///////////////////////////////////////////////////////////////////////////////
 
 // HDU ////////////////////////////////////////////////////////////////////////
-wire stall_PC, stall_IF_ID, stall_ID_EX, stall_EX_MEM, stall_MEM_WB, d_access_stall;
 
 HDU hazard_detection_unit(
 	// Output
@@ -374,7 +380,6 @@ HDU hazard_detection_unit(
 
 
 // Memory Heirarchy ///////////////////////////////////////////////////////////
-wire i_rdy_CC, d_rdy_CC;
 
 mem_heirarchy MH(
 	// Outputs
