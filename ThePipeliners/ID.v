@@ -49,7 +49,8 @@ module ID(
 	output [3:0] shamt, dst_addr_new, p0_addr, p1_addr;
 	output [2:0] func;
 	output hlt, src1sel;
-	output re_mem, we_mem, wb_sel, j_ctrl, we_rf;
+	output re_mem, we_mem, wb_sel, j_ctrl, we_rf, JR_stall;
+
 	
 	// Local Wires //
 	wire [15:0] JR_REG;
@@ -103,7 +104,10 @@ module ID(
 		.EX_we(EX_we),
 		.JR(p0_addr),
 		.MEM_mem_re(MEM_mem_re),
+		.WB_rf_we(we_WB),
+		.WB_dst(dst_addr_WB),
 		//outputs
+		.JR_WB_FORWARD(JR_WB_FORWARD),
 		.JR_MEM_LDATA_FORWARD(JR_MEM_LDATA_FORWARD),
 		.JR_MEM_FORWARD(JR_MEM_FORWARD),
 		.JR_EX_FORWARD(JR_EX_FORWARD),
@@ -111,11 +115,12 @@ module ID(
 		);
 		
 	// Jumps definitely cause flushing.	
-	assign JR_REG = (JR_MEM_LDATA_FORWARD)	?	MEM_ldata:
-					(JR_MEM_FORWARD)		?	MEM_data:
-					(JR_EX_FORWARD)			?	EX_data:
-					(JR_ID)					?	p0:
-											16'hxxxx;
+	assign JR_REG = (JR_MEM_LDATA_FORWARD)		?	MEM_ldata:
+					(JR_MEM_FORWARD)			?	MEM_data:
+					(JR_EX_FORWARD)				?	EX_data:
+					(JR_WB_FORWARD)				?	dst_data_WB:
+					(JR_ID)						?	p0:
+													16'hxxxx;
 	
 	assign j_ctrl = ((instr[15:12] == jalOp)||(instr[15:12] == jrOp));
 	assign j_pc = 	(instr[15:12] == jalOp) ? (pc+{{4{instr[11]}}, instr[11:0]}):

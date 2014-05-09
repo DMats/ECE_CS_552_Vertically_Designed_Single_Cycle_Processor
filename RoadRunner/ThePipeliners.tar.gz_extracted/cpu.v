@@ -46,6 +46,8 @@ IF_ID_FF IF_ID(
 	// Output
 	.instr_ID(instr_ID_EX),
 	.pc_ID(pc_ID_EX_MEM_WB),
+	.prev_stall_ID(prev_stall_IF_ID),
+	.prev_flush_ID(prev_flush_IF_ID),
 	// Inputs
 	.instr_IF(instr_IF_ID_EX),
 	.pc_IF(pc_IF_ID_EX_MEM_WB),
@@ -55,7 +57,7 @@ IF_ID_FF IF_ID(
 	.flush(flush_IF_ID)
 	);
 	
-	assign flush_IF_ID = (b_ctrl_EX_MEM | j_ctrl_ID_EX_MEM_WB) ? 1'b1 : 1'b0;
+	assign flush_IF_ID = (b_ctrl_EX_MEM | j_ctrl_ID_EX_MEM_WB | (prev_stall_IF_ID & prev_flush_IF_ID)) ? 1'b1 : 1'b0;
 	assign stall_or_hlt_IF_ID = stall_IF_ID | hlt_ID_EX_MEM_WB;
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +75,7 @@ wire [3:0] shamt_ID_EX, dst_addr_ID_EX_MEM_WB, p0_addr_ID_EX, p1_addr_ID_EX;
 wire [2:0] func_ID_EX;
 wire we_mem_ID_EX_MEM, re_mem_ID_EX_MEM, wb_sel_ID_EX_MEM_WB, src1sel_ID_EX,
 	we_rf_ID_EX_MEM_WB, j_ctrl_ID_EX_MEM_WB, hlt_ID_EX_MEM_WB, stall_or_hlt_ID_EX, 
-	hlt_ID_EX_MEM_WB_CTRL, flush_ID_EX;
+	hlt_ID_EX_MEM_WB_CTRL, flush_ID_EX, prev_stall_IF_ID, prev_flush_IF_ID;
 
 // Instantiate ID
 ID instruction_decode(	

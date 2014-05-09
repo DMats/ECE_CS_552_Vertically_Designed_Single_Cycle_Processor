@@ -7,12 +7,12 @@ R00000006 = 7ff1
 R00000007 = 7ff2
 R00000008 = 7fff
 R00000009 = 0001
-R0000000a = xxxx
-R0000000b = xxxx
-R0000000c = xxxx
+R0000000a = ffff
+R0000000b = 8000
+R0000000c = 7fff
 R0000000d = xxxx
 R0000000e = xxxx
 R0000000f = xxxx
-Time:        301
-Cycles:       30
-PC:         xxxx
+Time:        351
+Cycles:       35
+PC:         0011
