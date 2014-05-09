@@ -57,7 +57,7 @@ module cache_controller(
 					i_we = 0;
 					addr_sel = 0;
 					d_data_sel = 0;
-					d_rdy_CC = d_rdy;
+					d_rdy_CC = 1;
 					if(data_we) begin
 						d_set_dirty = 1;
 						d_we_CC = 1;
@@ -128,10 +128,10 @@ module cache_controller(
 						u_re = 0;
 						u_we = 0;
 						//d_re = 0;
-						d_we_CC = 0;
+						d_we_CC = 1;
 						i_we = 0;
 						addr_sel = 0;
-						d_set_dirty = 0;
+						d_set_dirty = 1;
 						d_data_sel = 0;
 						d_rdy_CC = 0;
 					end
@@ -150,7 +150,7 @@ module cache_controller(
 					i_we = 1;
 					addr_sel = 0;
 					d_set_dirty = 0;
-					d_rdy_CC = 0;
+					d_rdy_CC = 1;
 				end
 				else begin
 					next_state = state_i_rd;
@@ -180,6 +180,7 @@ module cache_controller(
 					addr_sel = 1;
 					d_set_dirty = 0;
 					d_data_sel = 1;
+					d_rdy_CC = 0;
 				end
 				else begin
 					next_state = state_d_rd_evict;
@@ -192,6 +193,7 @@ module cache_controller(
 					addr_sel = 1;
 					d_set_dirty = 0;
 					d_data_sel = 0;
+					d_rdy_CC = 0;
 				end
 			end
 			
@@ -206,7 +208,7 @@ module cache_controller(
 					//d_re = 0;
 					d_we_CC = 1;
 					i_we = 0;
-					addr_sel = 1;
+					addr_sel = 0;
 					d_set_dirty = 0;
 					d_rdy_CC = 1;	
 				end
@@ -218,7 +220,7 @@ module cache_controller(
 					//d_re = 0;
 					d_we_CC = 1;
 					i_we = 0;
-					addr_sel = 1;
+					addr_sel = 0;
 					d_set_dirty = 0;
 					d_rdy_CC = 1;	
 				end
@@ -245,7 +247,7 @@ module cache_controller(
 					u_re = 0;
 					u_we = 0;
 					//d_re = 0;
-					d_we_CC = 0;
+					d_we_CC = 1;
 					i_we = 0;
 					addr_sel = 1;
 					d_set_dirty = 0;
@@ -278,7 +280,7 @@ module cache_controller(
 					//d_re = 0;
 					d_we_CC = 1;
 					i_we = 0;
-					addr_sel = 0;
+					addr_sel = 1;
 					d_data_sel = 0;
 					d_set_dirty = 1;
 					d_rdy_CC = 1;					
@@ -286,10 +288,10 @@ module cache_controller(
 				else if(~i_rdy) begin
 					next_state = state_i_rd;
 					evict = 0;
-					u_re = 0;
+					u_re = 1;
 					u_we = 0;
 					//d_re = 0;
-					d_we_CC = 1;
+					d_we_CC = 0;
 					i_we = 0;
 					addr_sel = 0;
 					d_data_sel = 0;
@@ -299,7 +301,7 @@ module cache_controller(
 				else begin
 					next_state = state_d_w_miss;
 					evict = 0;
-					u_re = 1;
+					u_re = 0;
 					u_we = 0;
 					//d_re = 0;
 					d_we_CC = 0;
@@ -324,7 +326,7 @@ module cache_controller(
 				d_set_dirty = 0;
 				d_data_sel = 0;
 				d_set_dirty = 0;
-				d_rdy_CC = 0;
+				d_rdy_CC = 1;
 			end
 		
 		endcase	
