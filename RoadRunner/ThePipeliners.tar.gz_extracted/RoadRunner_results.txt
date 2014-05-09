@@ -1,5 +1,5 @@
 another_sample.asm, pass, 9, 8
-BasicOpCodes2.txt, pass, 74, 68
+BasicOpCodes2.txt, pass, 73, 68
 BasicOpCodes4.txt, fail
 Davids_Cache_Test.txt, pass, 25, 24
 force_store_evict.asm, fail
@@ -12,4 +12,4 @@ prog5.txt, pass, 520, 517
 sample.txt, pass, 9, 8
 Test_Basic.asm, pass, 39, 34
 Test_Forward.asm, pass, 47, 41
-Test_Simple_2.asm, pass, 52, 47
+Test_Simple_2.asm, fail

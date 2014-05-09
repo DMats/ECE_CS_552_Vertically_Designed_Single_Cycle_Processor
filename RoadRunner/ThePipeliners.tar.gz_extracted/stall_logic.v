@@ -73,12 +73,12 @@ module stall_logic(clk, rst_n, instr, stall);
 								(curr_opcode==sraOp)	||
 								(curr_opcode==lwOp));
 	assign store_source 	=  	(curr_opcode==swOp);
-	assign jump_reg_source 	=	(curr_opcode==jrOp); 
+	assign jump_reg_source 	=	(curr_opcode==jrOp);
 	// I realized that I could have used the read enable instead of the above nonsense.
 	// But it's too late!  No turning back now!
 
 	// Hazard Signal
-	// The three major cases are separated			HERE
+	// The four major cases are separated			HERE
 	assign hazard = (((prev_opcode==lwOp) 	&& 
 					(two_sources) 			&& 
 					((prev_dest==curr_src1) || 
@@ -89,8 +89,7 @@ module stall_logic(clk, rst_n, instr, stall);
 					((prev_opcode==lwOp)	&&
 					(store_source)			&&
 					(prev_dest==curr_src_sw))		||
-					((prev_opcode==lwOp)	&&
-					(jump_reg_source) 		&&
+					((jump_reg_source) 		&&
 					(prev_dest==curr_src_jr)));
 
 	// Stall State Machine - Sequential Logic //

@@ -1,4 +1,4 @@
-R00000001 = aaaa
+R00000001 = 0011
 R00000002 = 0022
 R00000003 = xxxx
 R00000004 = xxxx
@@ -13,6 +13,6 @@ R0000000c = xxxx
 R0000000d = xxxx
 R0000000e = xxxx
 R0000000f = xxxx
-Time:        291
-Cycles:       29
-PC:         000d
+Time:        201
+Cycles:       20
+PC:         xxxx

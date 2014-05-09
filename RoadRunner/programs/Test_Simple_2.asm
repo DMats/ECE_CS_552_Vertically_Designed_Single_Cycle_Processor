@@ -30,6 +30,5 @@ PASS:
 llb R15, 0x00
 add R2, R1, R1 			/// OHHHH SHITTTT.
 llb R2, 0x04
-jr R2
 
 hlt
