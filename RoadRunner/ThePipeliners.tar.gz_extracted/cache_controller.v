@@ -2,7 +2,7 @@ module cache_controller(
 	// Inputs
 	clk, rst_n, i_rdy, d_rdy, u_rdy, data_re, data_we, dirty,
 	// Outputs
-	u_re, u_we, d_we_CC, i_we, addr_sel, d_set_dirty, evict, d_data_sel, d_we_CC, d_rdy_CC //, stall
+	u_re, u_we, d_we_CC, i_we, addr_sel, d_set_dirty, evict, d_data_sel, d_rdy_CC //, stall
 	);
 	
 	// Inputs
@@ -11,6 +11,8 @@ module cache_controller(
 	// Outputs
 	output reg u_re, u_we, i_we, addr_sel, d_set_dirty, evict, d_data_sel, d_we_CC, d_rdy_CC;//, stall;
 	
+	reg [2:0] current_state, next_state;
+
 	localparam state_idle = 3'b000;
 	localparam state_i_rd = 3'b001;
 	localparam state_d_rd_evict = 3'b010;
@@ -18,7 +20,7 @@ module cache_controller(
 	localparam state_d_w_evict = 3'b100;
 	localparam state_d_w_miss = 3'b101;
 	
-	reg [2:0] current_state, next_state;
+
 	
 	always@(posedge clk, negedge rst_n) begin
 		if(~rst_n)begin
@@ -122,7 +124,7 @@ module cache_controller(
 						d_data_sel = 0;
 						d_rdy_CC = 0;
 					end
-					else if(data_we & (~dirty || dirty === 1'bx)) begin
+					else if(data_we & (~dirty/* || dirty === 1'bx*/)) begin
 						next_state = state_d_w_miss;
 						evict = 0;
 						u_re = 0;

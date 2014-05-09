@@ -49,7 +49,7 @@ module ID(
 	output [3:0] shamt, dst_addr_new, p0_addr, p1_addr;
 	output [2:0] func;
 	output hlt, src1sel;
-	output re_mem, we_mem, wb_sel, j_ctrl, we_rf, JR_stall;
+	output re_mem, we_mem, wb_sel, j_ctrl, we_rf;
 
 	
 	// Local Wires //

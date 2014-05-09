@@ -94,7 +94,7 @@ module mem_heirarchy(
 						(d_offset == 2'b10)	?	d_cache_line[47:32]:
 						(d_offset == 2'b11)	?	d_cache_line[63:48]:
 												16'hxxxx;
-	assign d_constr_addr = (evict) ? {d_tag, d_addr[7:2]} : d_addr[15:2];
+	assign d_constr_addr[13:0] = (evict) ? {d_tag, d_addr[7:2]} : d_addr[15:2];
 		
 	unified_mem U_MEM(
 		//Inputs
@@ -111,7 +111,7 @@ module mem_heirarchy(
 		
 	assign u_wr_data = d_cache_line;
 		
-	assign u_addr = (addr_sel) ? d_constr_addr[15:2] : i_addr[15:2];
+	assign u_addr = (addr_sel) ? d_constr_addr[13:0] : i_addr[15:2];
 		
 		
 endmodule

@@ -1,15 +1,15 @@
-another_sample.asm, pass, 9, 8
 BasicOpCodes2.txt, pass, 73, 68
 BasicOpCodes4.txt, fail
 Davids_Cache_Test.txt, pass, 25, 24
-force_store_evict.asm, fail
-jal_jr_r15.txt, fail
 NOP_test.txt, pass, 34, 30
 OverflowTest.txt, pass, 40, 35
 Prog0.asm, pass, 33, 35
-prog1.txt, pass, 18, 19
-prog5.txt, pass, 520, 517
-sample.txt, pass, 9, 8
 Test_Basic.asm, pass, 39, 34
 Test_Forward.asm, pass, 47, 41
 Test_Simple_2.asm, pass, 29, 25
+another_sample.asm, pass, 9, 8
+force_store_evict.asm, fail
+jal_jr_r15.txt, fail
+prog1.txt, pass, 18, 19
+prog5.txt, pass, 520, 517
+sample.txt, pass, 9, 8
